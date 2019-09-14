@@ -1,5 +1,6 @@
 package com.truedev.kinoposk.api.service
 
+import com.truedev.kinoposk.api.model.top.Type
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -8,9 +9,6 @@ import org.junit.Test
 class KinopoiskApiServiceTest {
 
     val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService()
-    @Before
-    fun setUp() {
-    }
 
     @Test
     fun getFilmInfo() {
@@ -35,5 +33,39 @@ class KinopoiskApiServiceTest {
         assertTrue(gallery.data.gallery.poster.isNotEmpty())
     }
 
+    @Test
+    fun getKPReviews() {
+        val kpReviews = kinopoiskApiService.getKPReviews(843650)
+
+        assertEquals(843650, kpReviews.data.filmID)
+    }
+
+    @Test
+    fun getKPPeopleDetailView() {
+        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(10096)
+
+        assertEquals(10096, kpPeopleDetailView.data.peopleID)
+    }
+
+    @Test
+    fun getKPTopBestFilms() {
+        val kpTop = kinopoiskApiService.getKPTop(1, Type.BEST_FILMS)
+
+        assertTrue(kpTop.data.items.isNotEmpty())
+    }
+
+    @Test
+    fun getKPTopPopularFilms() {
+        val kpTop = kinopoiskApiService.getKPTop(1, Type.POPULAR_FILMS)
+
+        assertTrue(kpTop.data.items.isNotEmpty())
+    }
+
+    @Test
+    fun getKPTopAwaitFilms() {
+        val kpTop = kinopoiskApiService.getKPTop(1, Type.AWAIT_FILMS)
+
+        assertTrue(kpTop.data.items.isNotEmpty())
+    }
 
 }
