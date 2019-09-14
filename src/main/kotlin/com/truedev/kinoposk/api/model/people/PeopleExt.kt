@@ -1,4 +1,4 @@
-package com.truedev.kinoposk.api.model.staff
+package com.truedev.kinoposk.api.model.people
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
@@ -8,5 +8,3 @@ data class PeopleExt(
     val message: String = "",
     val data: Data = Data()
 )
-
-

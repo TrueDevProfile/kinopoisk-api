@@ -1,6 +1,9 @@
 package com.truedev.kinoposk.api.service
 
+import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.truedev.kinoposk.api.exception.BadResponseException
 import com.truedev.kinoposk.api.exception.NotFoundException
@@ -11,6 +14,7 @@ import org.apache.http.client.methods.RequestBuilder
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -18,7 +22,7 @@ import java.time.ZoneOffset
 internal class KPApiClientService {
 
     private val httpClient: CloseableHttpClient = HttpClients.createDefault()
-    private val mapper: ObjectMapper = jacksonObjectMapper()
+    private val mapper: ObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     companion object {
         private const val API_URL = "https://ext.kinopoisk.ru/ios/5.0.0/"
@@ -47,7 +51,17 @@ internal class KPApiClientService {
 
     private fun <T> handleResponse(response: CloseableHttpResponse, clazz: Class<T>): T {
         return when (response.statusLine.statusCode) {
-            200 -> mapper.readValue(EntityUtils.toString(response.entity), clazz)
+            200 -> {
+                try {
+                    mapper.readValue(EntityUtils.toString(response.entity), clazz)
+                } catch (ex: IOException) {
+                    throw BadResponseException()
+                } catch (ex: JsonParseException) {
+                    throw BadResponseException()
+                } catch (ex: JsonMappingException) {
+                    throw BadResponseException()
+                }
+            }
             404 -> throw NotFoundException()
             else -> throw BadResponseException()
         }
