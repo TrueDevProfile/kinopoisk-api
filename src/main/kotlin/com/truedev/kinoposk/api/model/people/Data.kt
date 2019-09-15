@@ -12,8 +12,7 @@ data class Data(
     val webURL: String = "",
     val nameRU: String = "",
     val nameEN: String = "",
-    // will be enum soon...
-    val sex: String = "",
+    val sex: Sex = Sex.MALE,
     val posterURL: String = "",
     val growth: Int = 0,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
