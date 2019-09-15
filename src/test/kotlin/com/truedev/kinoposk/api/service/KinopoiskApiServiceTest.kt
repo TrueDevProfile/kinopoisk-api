@@ -3,7 +3,6 @@ package com.truedev.kinoposk.api.service
 import com.truedev.kinoposk.api.model.top.Type
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 
 class KinopoiskApiServiceTest {
@@ -35,7 +34,7 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPReviews() {
-        val kpReviews = kinopoiskApiService.getKPReviews(843650)
+        val kpReviews = kinopoiskApiService.getKPReviews(843650, 2)
 
         assertEquals(843650, kpReviews.data.filmID)
     }
@@ -66,6 +65,20 @@ class KinopoiskApiServiceTest {
         val kpTop = kinopoiskApiService.getKPTop(1, Type.AWAIT_FILMS)
 
         assertTrue(kpTop.data.items.isNotEmpty())
+    }
+
+    @Test
+    fun getKPSearchInFilms() {
+        val kpSearchInFilms = kinopoiskApiService.getKPSearchInFilms("avengers", 1)
+
+        assertTrue(kpSearchInFilms.data.searchFilms.isNotEmpty())
+    }
+
+    @Test
+    fun getKPSearchInPeople() {
+        val kpSearchInPeople = kinopoiskApiService.getKPSearchInPeople("Robert", 1)
+
+        assertTrue(kpSearchInPeople.data.searchPeople.isNotEmpty())
     }
 
 }

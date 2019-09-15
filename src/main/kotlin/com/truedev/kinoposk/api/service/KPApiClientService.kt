@@ -55,11 +55,11 @@ internal class KPApiClientService {
                 try {
                     mapper.readValue(EntityUtils.toString(response.entity), clazz)
                 } catch (ex: IOException) {
-                    throw BadResponseException()
+                    throw BadResponseException(ex)
                 } catch (ex: JsonParseException) {
-                    throw BadResponseException()
+                    throw BadResponseException(ex)
                 } catch (ex: JsonMappingException) {
-                    throw BadResponseException()
+                    throw BadResponseException(ex)
                 }
             }
             404 -> throw NotFoundException()

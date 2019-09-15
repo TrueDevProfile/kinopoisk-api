@@ -8,8 +8,7 @@ data class Spouse(
     val name: String = "",
     val divorced: Boolean = false,
     val divorcedReason: String = "",
-    // will be enum soon...
-    val sex: String = "",
+    val sex: Sex = Sex.MALE,
     val children: Int = 0,
     val webURL: String = "",
     val relation: String = ""

@@ -32,7 +32,7 @@ or pom.xml
 build.gradle
 
     dependencies {
-    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.2'
+    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.3'
     }
     	
 or pom.xml   
@@ -40,7 +40,7 @@ or pom.xml
     <dependency>
         <groupId>com.github.TrueDevProfile</groupId>
     	<artifactId>kinopoisk-api</artifactId>
-    	<version>0.0.2</version>
+    	<version>0.0.3</version>
     </dependency>	
 * Now you can use api. E.g. you can get film info by id 
 
@@ -48,8 +48,15 @@ or pom.xml
         FilmExt filmInfo = kinopoiskExtApiService.getFilmInfo(1234); 
 
 
+## Api methods
 
-
-
+* `kinopoiskExtApiService.getFilmInfo(filmId)` retrieves all data about the film by id.
+* `kinopoiskExtApiService.getStaffList(filmId)` retrieves data about the staff (actors,producers and so on) by film id.
+* `kinopoiskExtApiService.getGallery(filmId)` retrieves gallery according to film id.
+* `kinopoiskExtApiService.getKPReviews(filmId)` retrieves reviews by film id. It does not contain full review text.
+* `kinopoiskExtApiService.getKPPeopleDetailView(peopleId)` retrieves detail info of staff person(actor, producer and so on).
+* `kinopoiskExtApiService.getKPTop()` retrieves top of films according the params.
+* `kinopoiskExtApiService.getKPSearchInFilms()`does a search in films by keyword.
+* `kinopoiskExtApiService.getKPSearchInPeople()`does a search in people by keyword.
 
 
