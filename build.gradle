@@ -13,14 +13,18 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+configurations {
+    ktlint
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.apache.httpcomponents:httpclient:4.5.10"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.8"
-    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.8"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9"
+    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9"
+    ktlint "com.pinterest:ktlint:0.34.2"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
@@ -33,8 +37,24 @@ jacocoTestReport {
     }
 }
 
-check.dependsOn jacocoTestReport
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
 
+check.dependsOn jacocoTestReport, ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
+}
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

@@ -10,6 +10,7 @@ import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
 import java.net.URLEncoder
+import java.util.Optional
 
 class KinopoiskApiService {
     private val kpApiClientService: KPApiClientService = KPApiClientService()
@@ -33,17 +34,16 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getFilmInfo(filmId: Int): FilmExt {
+    fun getFilmInfo(filmId: Int): Optional<FilmExt> {
         return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java)
     }
-
 
     /**
      * This method retrieves staff. E.g. actors, producers and so on.
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getStaffList(filmId: Int): StaffExt {
+    fun getStaffList(filmId: Int): Optional<StaffExt> {
         return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
     }
 
@@ -52,7 +52,7 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getGallery(filmId: Int): GalleryExt {
+    fun getGallery(filmId: Int): Optional<GalleryExt> {
         return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
     }
 
@@ -62,7 +62,7 @@ class KinopoiskApiService {
      * @param filmId id of film from kinopoisk.
      * @param page page of results.
      */
-    fun getKPReviews(filmId: Int, page: Int): ReviewExt {
+    fun getKPReviews(filmId: Int, page: Int): Optional<ReviewExt> {
         return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewExt::class.java)
     }
 
@@ -71,7 +71,7 @@ class KinopoiskApiService {
      *
      * @param peopleId id of people from kinopoisk.
      */
-    fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
+    fun getKPPeopleDetailView(peopleId: Int): Optional<PeopleExt> {
         return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
     }
 
@@ -81,7 +81,7 @@ class KinopoiskApiService {
      * @param page page of results.
      * @param type type of top. E.g. POPULAR_FILMS, BEST_FILMS, AWAIT_FILMS.
      */
-    fun getKPTop(page: Int, type: Type): TopExt {
+    fun getKPTop(page: Int, type: Type): Optional<TopExt> {
         return kpApiClientService.request("$GET_TOP?page=$page&type=${type.type}", TopExt::class.java)
     }
 
@@ -89,9 +89,9 @@ class KinopoiskApiService {
      * This method searches films by keyword.
      *
      * @param keyword for searching.
-     * @param page  page of results.
+     * @param page page of results.
      */
-    fun getKPSearchInFilms(keyword: String, page: Int): SearchFimResultExt {
+    fun getKPSearchInFilms(keyword: String, page: Int): Optional<SearchFimResultExt> {
         return kpApiClientService.request(
             "$GET_SEARCH_FILM?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
             SearchFimResultExt::class.java
@@ -104,12 +104,10 @@ class KinopoiskApiService {
      * @param keyword for searching.
      * @param page page of results.
      */
-    fun getKPSearchInPeople(keyword: String, page: Int): SearchPeopleResultExt {
+    fun getKPSearchInPeople(keyword: String, page: Int): Optional<SearchPeopleResultExt> {
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
             SearchPeopleResultExt::class.java
         )
     }
-
-
 }
