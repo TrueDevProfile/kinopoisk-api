@@ -9,7 +9,6 @@ import com.truedev.kinoposk.api.exception.BadResponseException
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.Optional
 import org.apache.commons.codec.digest.DigestUtils.md5Hex
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.client.methods.RequestBuilder
@@ -27,7 +26,7 @@ internal class KPApiClientService {
         private const val SALT = "IDATevHDS7"
     }
 
-    fun <T> request(path: String, clazz: Class<T>): Optional<T> {
+    fun <T> request(path: String, clazz: Class<T>): T? {
         val ts = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli().toString()
         val key = md5Hex(path + ts + SALT)
         val request = createRequest(path, ts, key)
@@ -35,7 +34,7 @@ internal class KPApiClientService {
             when (it.statusLine.statusCode) {
                 200 -> {
                     try {
-                        Optional.of(mapper.readValue(EntityUtils.toString(it.entity), clazz))
+                        mapper.readValue(EntityUtils.toString(it.entity), clazz)
                     } catch (ex: IOException) {
                         throw BadResponseException(ex)
                     } catch (ex: JsonParseException) {
@@ -44,7 +43,7 @@ internal class KPApiClientService {
                         throw BadResponseException(ex)
                     }
                 }
-                404 -> Optional.empty()
+                404 -> null
                 else -> throw BadResponseException()
             }
         }

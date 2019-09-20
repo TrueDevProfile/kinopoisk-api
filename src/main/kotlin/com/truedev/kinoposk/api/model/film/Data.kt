@@ -1,11 +1,14 @@
 package com.truedev.kinoposk.api.model.film
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Data(
     val hasSimilarFilms: Boolean = false,
-    val reviewsCount: String = "",
+    @JsonDeserialize(using = StringToIntDeserializer::class)
+    val reviewsCount: Int = 0,
     val ratingData: RatingData = RatingData(),
     val filmID: Int = 0,
     val webURL: String = "",
