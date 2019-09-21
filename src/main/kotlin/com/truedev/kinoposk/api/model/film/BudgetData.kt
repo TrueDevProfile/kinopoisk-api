@@ -7,10 +7,10 @@ import com.truedev.kinoposk.api.model.deserializer.StringToLongDeserializer
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BudgetData(
     @JsonDeserialize(using = StringToLongDeserializer::class)
-    val grossUSA: Long = 0,
+    val grossUSA: Long? = null,
     @JsonDeserialize(using = StringToLongDeserializer::class)
-    val grossWorld: Long = 0,
-    val budget: String = "",
+    val grossWorld: Long? = null,
+    val budget: String? = null,
     @JsonDeserialize(using = StringToLongDeserializer::class)
-    val marketing: Long = 0
+    val marketing: Long? = null
 )
