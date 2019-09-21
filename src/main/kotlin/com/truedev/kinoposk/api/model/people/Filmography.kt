@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Filmography(
     val filmID: Int = 0,
-    //Or float or procent
+    // Or float or procent
     val rating: String = "",
-    //can be with whitespace
+    // can be with whitespace
     val ratingVoteCount: String = "",
     val description: String = "",
     val professionText: String = "",
@@ -16,6 +16,6 @@ data class Filmography(
     val professionKey: String = "",
     val nameRU: String = "",
     val nameEN: String = "",
-    //can be like 2002-...
+    // can be like 2002-...
     val year: String = ""
 )

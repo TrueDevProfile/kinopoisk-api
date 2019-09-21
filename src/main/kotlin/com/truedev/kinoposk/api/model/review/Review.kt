@@ -9,7 +9,7 @@ data class Review(
     val reviewID: Int = 0,
     val reviewType: String = "",
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm dd.MM.yyyy")
-    val reviewData: LocalDateTime = LocalDateTime.now(),
+    val reviewData: LocalDateTime? = null,
     val reviewAutor: String = "",
     val reviewTitle: String = "",
     val reviewDescription: String = ""

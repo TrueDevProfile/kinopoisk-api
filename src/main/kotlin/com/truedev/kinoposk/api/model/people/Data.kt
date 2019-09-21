@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.truedev.kinoposk.api.model.gallery.Poster
 import java.time.LocalDate
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Data(
     val peopleID: Int = 0,
@@ -16,7 +15,7 @@ data class Data(
     val posterURL: String = "",
     val growth: Int = 0,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-    val birthday: LocalDate = LocalDate.now(),
+    val birthday: LocalDate? = null,
     val age: Int = 0,
     val birthplace: String = "",
     val spouse: List<Spouse> = emptyList(),

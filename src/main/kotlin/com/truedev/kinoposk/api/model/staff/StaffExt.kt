@@ -8,5 +8,3 @@ data class StaffExt(
     val message: String = "",
     val data: Data = Data()
 )
-
-
