@@ -11,5 +11,6 @@ data class BudgetData(
     @JsonDeserialize(using = StringToLongDeserializer::class)
     val grossWorld: Long = 0,
     val budget: String = "",
-    val marketing: String = ""
+    @JsonDeserialize(using = StringToLongDeserializer::class)
+    val marketing: Long = 0
 )
