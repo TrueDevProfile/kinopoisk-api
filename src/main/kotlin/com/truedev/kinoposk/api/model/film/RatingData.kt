@@ -15,7 +15,7 @@ data class RatingData(
     val ratingIMDb: Double = 0.0,
     @JsonDeserialize(using = StringToIntDeserializer::class)
     val ratingIMDbVoteCount: Int = 0,
-    val ratingFilmCritics: String = "",
+    val ratingFilmCritics: String? = null,
     val ratingFilmCriticsVoteCount: Int = 0
 
 )

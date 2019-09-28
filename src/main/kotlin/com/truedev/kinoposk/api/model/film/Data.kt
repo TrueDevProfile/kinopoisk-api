@@ -15,13 +15,13 @@ data class Data(
     val nameRU: String = "",
     val nameEN: String = "",
     val year: String = "",
-    val filmLength: String = "",
+    val filmLength: String? = null,
     val country: String = "",
     val genre: String = "",
-    val slogan: String = "",
-    val description: String = "",
-    val ratingMPAA: String = "",
-    val ratingAgeLimits: Int = 0,
+    val slogan: String? = null,
+    val description: String? = null,
+    val ratingMPAA: String? = null,
+    val ratingAgeLimits: Int? = null,
     val rentData: RentData = RentData(),
     val budgetData: BudgetData = BudgetData()
 )
