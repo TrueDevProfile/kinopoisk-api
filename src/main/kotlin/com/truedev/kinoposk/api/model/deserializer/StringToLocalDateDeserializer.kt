@@ -9,11 +9,14 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class StringToLocalDateDeserializer : JsonDeserializer<LocalDate>() {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LocalDate {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LocalDate? {
         return try {
             LocalDate.parse(p.text, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         } catch (e: DateTimeParseException) {
             YearMonth.parse(p.text, DateTimeFormatter.ofPattern("MM.yyyy")).atDay(1)
+            //            todo error 00.1996 -> only year then | 00.00.1994 https://www.kinopoisk.ru/film/41023/
+        } catch (e: Exception) {
+            null
         }
     }
 }
