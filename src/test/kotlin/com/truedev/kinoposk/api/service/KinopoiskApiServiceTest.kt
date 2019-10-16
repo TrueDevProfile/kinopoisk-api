@@ -18,7 +18,7 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getStaffList() {
-        val staffList = kinopoiskApiService.getStaffList(843650)
+        val staffList = kinopoiskApiService.getStaffList(221027)
 
         assertTrue(staffList?.data?.creators!!.isNotEmpty())
     }
@@ -41,9 +41,9 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPPeopleDetailView() {
-        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(10096)
+        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(2162346)
 
-        assertEquals(10096, kpPeopleDetailView?.data?.peopleID)
+        assertEquals(2162346, kpPeopleDetailView?.data?.peopleID)
     }
 
     @Test

@@ -44,7 +44,7 @@ internal class KPApiClientService {
                     }
                 }
                 404 -> null
-                else -> throw BadResponseException()
+                else -> throw BadResponseException(it.toString())
             }
         }
     }
