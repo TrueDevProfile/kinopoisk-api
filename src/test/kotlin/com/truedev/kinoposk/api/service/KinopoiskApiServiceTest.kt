@@ -7,7 +7,7 @@ import org.junit.Test
 
 class KinopoiskApiServiceTest {
 
-    val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService()
+    private val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService()
 
     @Test
     fun getFilmInfo() {
@@ -37,6 +37,15 @@ class KinopoiskApiServiceTest {
         val kpReviews = kinopoiskApiService.getKPReviews(843650, 2)
 
         assertEquals(843650, kpReviews?.data?.filmID)
+    }
+
+    @Test
+    fun getReviewDetail() {
+        val kpReviewDetail = kinopoiskApiService.getReviewDetail(2809633)
+
+        assertEquals(2809633, kpReviewDetail?.data?.review?.reviewID)
+        assertEquals("kp_review_positive", kpReviewDetail?.data?.review?.reviewType)
+        assertEquals("Max_Red", kpReviewDetail?.data?.review?.reviewAutor)
     }
 
     @Test

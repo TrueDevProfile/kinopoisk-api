@@ -3,7 +3,8 @@ package com.truedev.kinoposk.api.service
 import com.truedev.kinoposk.api.model.film.FilmExt
 import com.truedev.kinoposk.api.model.gallery.GalleryExt
 import com.truedev.kinoposk.api.model.people.PeopleExt
-import com.truedev.kinoposk.api.model.review.ReviewExt
+import com.truedev.kinoposk.api.model.review.ReviewListExt
+import com.truedev.kinoposk.api.model.review.details.ReviewExt
 import com.truedev.kinoposk.api.model.search.film.SearchFimResultExt
 import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
@@ -20,7 +21,7 @@ class KinopoiskApiService {
         private const val GET_GALLERY = "getGallery"
         private const val GET_SIMILAR = "getKPFilmsList"
         private const val GET_REVIEWS = "getKPReviews"
-        private const val GET_REVIEW_DETAIL = "getReviewDetail"
+        private const val GET_REVIEW_DETAIL = "getKPReviewDetail"
         private const val GET_PEOPLE_DETAIL = "getKPPeopleDetailView"
         private const val GET_TOP = "getKPTop"
         private const val GET_GLOBAL_SEARCH = "getKPGlobalSearch"
@@ -61,8 +62,8 @@ class KinopoiskApiService {
      * @param filmId id of film from kinopoisk.
      * @param page page of results.
      */
-    fun getKPReviews(filmId: Int, page: Int): ReviewExt? {
-        return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewExt::class.java)
+    fun getKPReviews(filmId: Int, page: Int): ReviewListExt? {
+        return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
     }
 
     /**
@@ -107,6 +108,17 @@ class KinopoiskApiService {
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
             SearchPeopleResultExt::class.java
+        )
+    }
+
+    /**
+     * This method retrieves review details.
+     *
+     * @param reviewId id of review from kinopoisk.
+     */
+    fun getReviewDetail(reviewId: Int): ReviewExt? {
+        return kpApiClientService.request(
+            "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
         )
     }
 }

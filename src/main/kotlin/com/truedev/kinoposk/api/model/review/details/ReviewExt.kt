@@ -1,4 +1,4 @@
-package com.truedev.kinoposk.api.model.review
+package com.truedev.kinoposk.api.model.review.details
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
