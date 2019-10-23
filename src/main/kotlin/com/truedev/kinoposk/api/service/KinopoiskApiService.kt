@@ -34,8 +34,9 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getFilmInfo(filmId: Int): FilmExt? {
+    fun getFilmInfo(filmId: Int): FilmExt {
         return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java)
+            .let { FilmExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -43,8 +44,9 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getStaffList(filmId: Int): StaffExt? {
+    fun getStaffList(filmId: Int): StaffExt {
         return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
+            .let { StaffExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -52,8 +54,9 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getGallery(filmId: Int): GalleryExt? {
+    fun getGallery(filmId: Int): GalleryExt {
         return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
+            .let { GalleryExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -62,8 +65,9 @@ class KinopoiskApiService {
      * @param filmId id of film from kinopoisk.
      * @param page page of results.
      */
-    fun getKPReviews(filmId: Int, page: Int): ReviewListExt? {
+    fun getKPReviews(filmId: Int, page: Int): ReviewListExt {
         return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
+            .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -71,8 +75,9 @@ class KinopoiskApiService {
      *
      * @param peopleId id of people from kinopoisk.
      */
-    fun getKPPeopleDetailView(peopleId: Int): PeopleExt? {
+    fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
         return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
+            .let { PeopleExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -81,8 +86,9 @@ class KinopoiskApiService {
      * @param page page of results.
      * @param type type of top. E.g. POPULAR_FILMS, BEST_FILMS, AWAIT_FILMS.
      */
-    fun getKPTop(page: Int, type: Type): TopExt? {
+    fun getKPTop(page: Int, type: Type): TopExt {
         return kpApiClientService.request("$GET_TOP?page=$page&type=${type.type}", TopExt::class.java)
+            .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -91,11 +97,11 @@ class KinopoiskApiService {
      * @param keyword for searching.
      * @param page page of results.
      */
-    fun getKPSearchInFilms(keyword: String, page: Int): SearchFimResultExt? {
+    fun getKPSearchInFilms(keyword: String, page: Int): SearchFimResultExt {
         return kpApiClientService.request(
             "$GET_SEARCH_FILM?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
             SearchFimResultExt::class.java
-        )
+        ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -104,11 +110,11 @@ class KinopoiskApiService {
      * @param keyword for searching.
      * @param page page of results.
      */
-    fun getKPSearchInPeople(keyword: String, page: Int): SearchPeopleResultExt? {
+    fun getKPSearchInPeople(keyword: String, page: Int): SearchPeopleResultExt {
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
             SearchPeopleResultExt::class.java
-        )
+        ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
@@ -116,9 +122,9 @@ class KinopoiskApiService {
      *
      * @param reviewId id of review from kinopoisk.
      */
-    fun getReviewDetail(reviewId: Int): ReviewExt? {
+    fun getReviewDetail(reviewId: Int): ReviewExt {
         return kpApiClientService.request(
             "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
-        )
+        ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
     }
 }
