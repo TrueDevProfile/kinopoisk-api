@@ -1,8 +1,6 @@
 package com.truedev.kinoposk.api.exception
 
-import java.lang.Exception
-
-class NotFoundException : Exception {
+class ResponseParseException : Exception {
     constructor() {}
 
     constructor(message: String) : super(message) {}

@@ -1,7 +1,9 @@
 package com.truedev.kinoposk.api.model.people
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.truedev.kinoposk.api.model.deserializer.StringToLocalDateDeserializer
+import com.truedev.kinoposk.api.model.deserializer.StringToSexEnumDeserializer
 import com.truedev.kinoposk.api.model.gallery.Poster
 import java.time.LocalDate
 
@@ -11,10 +13,11 @@ data class Data(
     val webURL: String = "",
     val nameRU: String = "",
     val nameEN: String = "",
-    val sex: Sex = Sex.MALE,
+    @JsonDeserialize(using = StringToSexEnumDeserializer::class)
+    val sex: Sex? = null,
     val posterURL: String = "",
     val growth: Int = 0,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @JsonDeserialize(using = StringToLocalDateDeserializer::class)
     val birthday: LocalDate? = null,
     val age: Int = 0,
     val birthplace: String = "",

@@ -1,4 +1,4 @@
-package com.truedev.kinoposk.api.model.review
+package com.truedev.kinoposk.api.model.review.details
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class ReviewExt(
     val resultCode: String = "",
     val message: String = "",
-    val data: Data = Data()
+    val data: Data? = null
 )

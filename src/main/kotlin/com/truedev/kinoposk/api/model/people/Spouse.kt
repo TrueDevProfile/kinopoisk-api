@@ -1,6 +1,8 @@
 package com.truedev.kinoposk.api.model.people
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.truedev.kinoposk.api.model.deserializer.StringToSexEnumDeserializer
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Spouse(
@@ -8,7 +10,8 @@ data class Spouse(
     val name: String = "",
     val divorced: Boolean = false,
     val divorcedReason: String = "",
-    val sex: Sex = Sex.MALE,
+    @JsonDeserialize(using = StringToSexEnumDeserializer::class)
+    val sex: Sex? = null,
     val children: Int = 0,
     val webURL: String = "",
     val relation: String = ""

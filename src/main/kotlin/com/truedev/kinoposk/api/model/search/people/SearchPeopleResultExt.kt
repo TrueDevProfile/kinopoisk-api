@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class SearchPeopleResultExt(
     val resultCode: String = "",
     val message: String = "",
-    val data: Data = Data()
+    val data: Data? = null
 )

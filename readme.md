@@ -1,6 +1,6 @@
 [![](https://www.jitpack.io/v/TrueDevProfile/kinopoisk-api.svg)](https://www.jitpack.io/#TrueDevProfile/kinopoisk-api)
 [![Build Status](https://travis-ci.org/TrueDevProfile/kinopoisk-api.svg?branch=master)](https://travis-ci.org/TrueDevProfile/kinopoisk-api)
-
+<a href="https://ktlint.github.io/"><img src="https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg" alt="ktlint"></a>
 
 # Kinopoisk Api
 
@@ -32,7 +32,7 @@ or pom.xml
 build.gradle
 
     dependencies {
-    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.6'
+    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.7'
     }
     	
 or pom.xml   
@@ -40,7 +40,7 @@ or pom.xml
     <dependency>
         <groupId>com.github.TrueDevProfile</groupId>
     	<artifactId>kinopoisk-api</artifactId>
-    	<version>0.0.6</version>
+    	<version>0.0.7</version>
     </dependency>	
 * Now you can use api. E.g. you can get film info by id 
 

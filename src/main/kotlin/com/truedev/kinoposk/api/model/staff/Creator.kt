@@ -7,7 +7,7 @@ data class Creator(
     val id: Int = 0,
     val nameRU: String = "",
     val nameEN: String = "",
-    val posterURL: String = "",
+    val posterURL: String? = null,
     val professionText: String = "",
     val professionKey: String = ""
 )
