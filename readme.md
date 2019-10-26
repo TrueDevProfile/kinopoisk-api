@@ -59,4 +59,8 @@ or pom.xml
 * `kinopoiskExtApiService.getKPSearchInFilms()`does a search in films by keyword.
 * `kinopoiskExtApiService.getKPSearchInPeople()`does a search in people by keyword.
 
+## WEB Api 
+
+All methods will be available via http://kinopoiskapiunofficial.tech soon... Now only searching film by id is available.
+
 
