@@ -11,9 +11,9 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getFilmInfo() {
-        val filmInfo = kinopoiskApiService.getFilmInfo(1300000)
+        val filmInfo = kinopoiskApiService.getFilmInfo(301)
 
-        assertEquals(1300000, filmInfo.data?.filmID)
+        assertEquals(301, filmInfo.data?.filmID)
     }
 
     @Test
