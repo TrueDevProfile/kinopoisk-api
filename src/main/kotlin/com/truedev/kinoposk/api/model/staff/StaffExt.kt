@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class StaffExt(
-    val resultCode: String = "",
+    val resultCode: Int = 0,
     val message: String = "",
     val data: Data? = null
 )

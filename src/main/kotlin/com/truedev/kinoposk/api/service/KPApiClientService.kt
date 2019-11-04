@@ -33,7 +33,7 @@ internal class KPApiClientService {
                 else -> null
             }
             ResponseExt(
-                it.statusLine.statusCode.toString(),
+                it.statusLine.statusCode,
                 it.statusLine.reasonPhrase,
                 entityExt
             )

@@ -32,7 +32,7 @@ or pom.xml
 build.gradle
 
     dependencies {
-    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.8'
+    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.0.9'
     }
     	
 or pom.xml   
@@ -40,7 +40,7 @@ or pom.xml
     <dependency>
         <groupId>com.github.TrueDevProfile</groupId>
     	<artifactId>kinopoisk-api</artifactId>
-    	<version>0.0.8</version>
+    	<version>0.0.9</version>
     </dependency>	
 * Now you can use api. E.g. you can get film info by id 
 
