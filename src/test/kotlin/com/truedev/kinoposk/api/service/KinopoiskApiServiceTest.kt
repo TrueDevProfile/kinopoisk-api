@@ -78,14 +78,14 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPSearchInFilms() {
-        val kpSearchInFilms = kinopoiskApiService.getKPSearchInFilms("avengers", 1)
+        val kpSearchInFilms = kinopoiskApiService.getKPSearchInFilms("avengers 2", 1)
 
         assertTrue(kpSearchInFilms.data?.searchFilms!!.isNotEmpty())
     }
 
     @Test
     fun getKPSearchInPeople() {
-        val kpSearchInPeople = kinopoiskApiService.getKPSearchInPeople("Robert", 1)
+        val kpSearchInPeople = kinopoiskApiService.getKPSearchInPeople("Robert De", 1)
 
         assertTrue(kpSearchInPeople.data?.searchPeople!!.isNotEmpty())
     }
