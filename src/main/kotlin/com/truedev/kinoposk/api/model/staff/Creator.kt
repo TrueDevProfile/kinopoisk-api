@@ -9,7 +9,7 @@ data class Creator(
     val id: Int = 0,
     val nameRU: String = "",
     val nameEN: String = "",
-    val posterURL: String? = null,
+    val posterUrl: String? = "https://st.kp.yandex.net/images/actor_iphone/iphone360_$id.jpg",
     val professionText: String = "",
     @JsonDeserialize(using = StringToProfessionDeserializer::class)
     val professionKey: Profession = Profession.UNKNOWN
