@@ -13,7 +13,7 @@ data class Item(
     val genre: String = "",
     val rating: String = "",
     val ratingVoteCount: String = "",
-    val posterURL: String = "",
+    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id",
     val videoURL: VideoUrl = VideoUrl(),
     val ratingChange: Int = 0,
     val isRatingUP: Int = 0,

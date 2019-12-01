@@ -1,5 +1,6 @@
 package com.truedev.kinoposk.api.service
 
+import com.google.common.net.UrlEscapers
 import com.truedev.kinoposk.api.model.film.FilmExt
 import com.truedev.kinoposk.api.model.gallery.GalleryExt
 import com.truedev.kinoposk.api.model.people.PeopleExt
@@ -10,7 +11,6 @@ import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
-import java.net.URLEncoder
 
 class KinopoiskApiService {
     private val kpApiClientService: KPApiClientService = KPApiClientService()
@@ -99,7 +99,7 @@ class KinopoiskApiService {
      */
     fun getKPSearchInFilms(keyword: String, page: Int): SearchFimResultExt {
         return kpApiClientService.request(
-            "$GET_SEARCH_FILM?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
+            "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper().escape(keyword)}&page=$page",
             SearchFimResultExt::class.java
         ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -112,7 +112,7 @@ class KinopoiskApiService {
      */
     fun getKPSearchInPeople(keyword: String, page: Int): SearchPeopleResultExt {
         return kpApiClientService.request(
-            "$GET_SEARCH_PEOPLE?keyword=${URLEncoder.encode(keyword, "UTF-8")}&page=$page",
+            "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper().escape(keyword)}&page=$page",
             SearchPeopleResultExt::class.java
         ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
     }
