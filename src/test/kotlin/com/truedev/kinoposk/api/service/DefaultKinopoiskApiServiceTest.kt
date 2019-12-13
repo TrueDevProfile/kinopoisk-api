@@ -5,27 +5,27 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class KinopoiskApiServiceTest {
+class DefaultKinopoiskApiServiceTest {
 
-    private val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService()
+    private val defaultKinopoiskApiService: DefaultKinopoiskApiService = DefaultKinopoiskApiService()
 
     @Test
     fun getFilmInfo() {
-        val filmInfo = kinopoiskApiService.getFilmInfo(301)
+        val filmInfo = defaultKinopoiskApiService.getFilmInfo(301)
 
         assertEquals(301, filmInfo.data?.filmID)
     }
 
     @Test
     fun getStaffList() {
-        val staffList = kinopoiskApiService.getStaffList(221027)
+        val staffList = defaultKinopoiskApiService.getStaffList(221027)
 
         assertTrue(staffList.data?.creators!!.isNotEmpty())
     }
 
     @Test
     fun getGallery() {
-        val gallery = kinopoiskApiService.getGallery(843650)
+        val gallery = defaultKinopoiskApiService.getGallery(843650)
 
         assertTrue(gallery.data?.gallery?.kadr!!.isNotEmpty())
         assertTrue(gallery.data!!.gallery.kadrSp.isNotEmpty())
@@ -34,14 +34,14 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPReviews() {
-        val kpReviews = kinopoiskApiService.getKPReviews(843650, 2)
+        val kpReviews = defaultKinopoiskApiService.getKPReviews(843650, 2)
 
         assertEquals(843650, kpReviews.data?.filmID)
     }
 
     @Test
     fun getReviewDetail() {
-        val kpReviewDetail = kinopoiskApiService.getReviewDetail(2809633)
+        val kpReviewDetail = defaultKinopoiskApiService.getReviewDetail(2809633)
 
         assertEquals(2809633, kpReviewDetail.data?.review?.reviewID)
         assertEquals("kp_review_positive", kpReviewDetail.data?.review?.reviewType)
@@ -50,42 +50,42 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPPeopleDetailView() {
-        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(2162346)
+        val kpPeopleDetailView = defaultKinopoiskApiService.getKPPeopleDetailView(2162346)
 
         assertEquals(2162346, kpPeopleDetailView.data?.peopleID)
     }
 
     @Test
     fun getKPTopBestFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.BEST_FILMS)
+        val kpTop = defaultKinopoiskApiService.getKPTop(1, Type.BEST_FILMS)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
 
     @Test
     fun getKPTopPopularFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.POPULAR_FILMS)
+        val kpTop = defaultKinopoiskApiService.getKPTop(1, Type.POPULAR_FILMS)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
 
     @Test
     fun getKPTopAwaitFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.AWAIT_FILMS)
+        val kpTop = defaultKinopoiskApiService.getKPTop(1, Type.AWAIT_FILMS)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
 
     @Test
     fun getKPSearchInFilms() {
-        val kpSearchInFilms = kinopoiskApiService.getKPSearchInFilms("avengers 2", 1)
+        val kpSearchInFilms = defaultKinopoiskApiService.getKPSearchInFilms("avengers 2", 1)
 
         assertTrue(kpSearchInFilms.data?.searchFilms!!.isNotEmpty())
     }
 
     @Test
     fun getKPSearchInPeople() {
-        val kpSearchInPeople = kinopoiskApiService.getKPSearchInPeople("Robert De", 1)
+        val kpSearchInPeople = defaultKinopoiskApiService.getKPSearchInPeople("Robert De", 1)
 
         assertTrue(kpSearchInPeople.data?.searchPeople!!.isNotEmpty())
     }
