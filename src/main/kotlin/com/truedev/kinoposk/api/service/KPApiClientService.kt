@@ -3,51 +3,54 @@ package com.truedev.kinoposk.api.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 import com.truedev.kinoposk.api.model.ResponseExt
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import org.apache.commons.codec.digest.DigestUtils.md5Hex
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.client.methods.RequestBuilder
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClients
-import org.apache.http.util.EntityUtils
 
 internal class KPApiClientService {
-
-    private val httpClient: CloseableHttpClient = HttpClients.createDefault()
     private val mapper: ObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     companion object {
         private const val API_URL = "https://ext.kinopoisk.ru/ios/5.0.0/"
         private const val SALT = "IDATevHDS7"
+
+        const val GET_FILM = "getKPFilmDetailView"
+        const val GET_FILM_STAFF = "getStaffList"
+        const val GET_GALLERY = "getGallery"
+        const val GET_SIMILAR = "getKPFilmsList"
+        const val GET_REVIEWS = "getKPReviews"
+        const val GET_REVIEW_DETAIL = "getKPReviewDetail"
+        const val GET_PEOPLE_DETAIL = "getKPPeopleDetailView"
+        const val GET_TOP = "getKPTop"
+        const val GET_GLOBAL_SEARCH = "getKPGlobalSearch"
+        const val GET_SEARCH_FILM = "getKPSearchInFilms"
+        const val GET_SEARCH_PEOPLE = "getKPSearchInPeople"
     }
 
     fun <T> request(path: String, clazz: Class<T>): ResponseExt<T> {
         val ts = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli().toString()
-        val key = md5Hex(path + ts + SALT)
-        val request = createRequest(path, ts, key)
-        return httpClient.execute(request) {
-            val entityExt = when (it.statusLine.statusCode) {
-                200 -> mapper.readValue(EntityUtils.toString(it.entity), clazz)
-                else -> null
-            }
-            ResponseExt(
-                it.statusLine.statusCode,
-                it.statusLine.reasonPhrase,
-                entityExt
-            )
+        val key = (path + ts + SALT).md5()
+        val (_, response, result) = (API_URL + path)
+            .httpGet()
+            .header(getHeaders(ts, key))
+            .responseString()
+
+        val entityExt = when (result) {
+            is Result.Failure -> null
+            is Result.Success -> mapper.readValue(result.get(), clazz)
         }
+        return ResponseExt(resultCode = response.statusCode, message = response.responseMessage, response = entityExt)
     }
 
-    private fun createRequest(path: String, ts: String, key: String): HttpUriRequest {
-        return RequestBuilder.get()
-            .setUri(API_URL + path)
-            .setHeader("Android-Api-Version", "19")
-            .setHeader("device", "android")
-            .setHeader("User-Agent", "Android client (5.1 / api19), ru.kinopoisk/4.7.1 (1644)")
-            .setHeader("X-TIMESTAMP", ts)
-            .setHeader("X-SIGNATURE", key)
-            .build()
+    private fun getHeaders(ts: String, key: String): Map<String, String> {
+        return mapOf(
+            "Android-Api-Version" to "19",
+            "device" to "android",
+            "User-Agent" to "Android client (5.1 / api19), ru.kinopoisk/4.7.1 (1644)",
+            "X-TIMESTAMP" to ts,
+            "X-SIGNATURE" to key
+        )
     }
 }
