@@ -11,23 +11,18 @@ import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM_STAFF
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_GALLERY
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_PEOPLE_DETAIL
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEWS
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_DETAIL
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
 
 class KinopoiskApiService {
     private val kpApiClientService: KPApiClientService = KPApiClientService()
-
-    companion object {
-        private const val GET_FILM = "getKPFilmDetailView"
-        private const val GET_FILM_STAFF = "getStaffList"
-        private const val GET_GALLERY = "getGallery"
-        private const val GET_SIMILAR = "getKPFilmsList"
-        private const val GET_REVIEWS = "getKPReviews"
-        private const val GET_REVIEW_DETAIL = "getKPReviewDetail"
-        private const val GET_PEOPLE_DETAIL = "getKPPeopleDetailView"
-        private const val GET_TOP = "getKPTop"
-        private const val GET_GLOBAL_SEARCH = "getKPGlobalSearch"
-        private const val GET_SEARCH_FILM = "getKPSearchInFilms"
-        private const val GET_SEARCH_PEOPLE = "getKPSearchInPeople"
-    }
 
     /**
      * This method retrieves film info.
