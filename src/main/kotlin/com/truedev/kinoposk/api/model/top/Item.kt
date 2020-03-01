@@ -1,6 +1,8 @@
 package com.truedev.kinoposk.api.model.top
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Item(
@@ -12,7 +14,8 @@ data class Item(
     val country: String = "",
     val genre: String = "",
     val rating: String = "",
-    val ratingVoteCount: String = "",
+    @JsonDeserialize(using = StringToIntDeserializer::class)
+    val ratingVoteCount: Int = 0,
     val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id",
     val videoURL: VideoUrl = VideoUrl(),
     val ratingChange: Int = 0,
