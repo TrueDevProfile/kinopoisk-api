@@ -15,7 +15,7 @@ data class SearchFilm(
     val filmLength: String = "",
     val country: String = "",
     val genre: String = "",
-    val rating: Double = 0.0,
+    val rating: String = "",
     @JsonDeserialize(using = StringToIntDeserializer::class)
     val ratingVoteCount: Int = 0,
     val posterURL: String = "",
