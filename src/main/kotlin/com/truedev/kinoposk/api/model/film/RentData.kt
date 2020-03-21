@@ -10,6 +10,8 @@ import java.time.LocalDate
 data class RentData(
     @JsonDeserialize(using = StringToLocalDateDeserializer::class)
     var premiereRU: LocalDate? = null,
+    @JsonDeserialize(using = StringToLocalDateDeserializer::class)
+    var premiereDigital: LocalDate? = null,
     @JsonProperty(value = "Distributors")
     val distributors: String? = null,
     @JsonDeserialize(using = StringToLocalDateDeserializer::class)
