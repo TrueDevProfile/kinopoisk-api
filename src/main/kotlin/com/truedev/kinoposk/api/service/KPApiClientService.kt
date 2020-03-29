@@ -3,9 +3,10 @@ package com.truedev.kinoposk.api.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.result.Result
 import com.truedev.kinoposk.api.model.ResponseExt
+import java.net.Proxy
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -29,14 +30,16 @@ internal class KPApiClientService {
         const val GET_SEARCH_PEOPLE = "getKPSearchInPeople"
     }
 
-    fun <T> request(path: String, clazz: Class<T>): ResponseExt<T> {
+    fun <T> request(path: String, clazz: Class<T>, proxy: Proxy? = Proxy.NO_PROXY): ResponseExt<T> {
         val ts = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli().toString()
         val key = (path + ts + SALT).md5()
-        val (_, response, result) = (API_URL + path)
-            .httpGet()
+        val currentTimeMillis = System.currentTimeMillis()
+        val (_, response, result) = FuelManager()
+            .also { it.proxy = proxy }
+            .get(API_URL + path)
             .header(getHeaders(ts, key))
             .responseString()
-
+        println(System.currentTimeMillis() - currentTimeMillis)
         val entityExt = when (result) {
             is Result.Failure -> null
             is Result.Success -> mapper.readValue(result.get(), clazz)

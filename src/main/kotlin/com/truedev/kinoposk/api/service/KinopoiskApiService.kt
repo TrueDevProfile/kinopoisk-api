@@ -20,6 +20,7 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
+import java.net.Proxy
 
 class KinopoiskApiService {
     private val kpApiClientService: KPApiClientService = KPApiClientService()
@@ -29,8 +30,8 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getFilmInfo(filmId: Int): FilmExt {
-        return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java)
+    fun getFilmInfo(filmId: Int, proxy: Proxy? = Proxy.NO_PROXY): FilmExt {
+        return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java, proxy)
             .let { FilmExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -39,8 +40,8 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getStaffList(filmId: Int): StaffExt {
-        return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
+    fun getStaffList(filmId: Int, proxy: Proxy? = Proxy.NO_PROXY): StaffExt {
+        return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java, proxy)
             .let { StaffExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -49,8 +50,8 @@ class KinopoiskApiService {
      *
      * @param filmId id of film from kinopoisk.
      */
-    fun getGallery(filmId: Int): GalleryExt {
-        return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
+    fun getGallery(filmId: Int, proxy: Proxy? = Proxy.NO_PROXY): GalleryExt {
+        return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java, proxy)
             .let { GalleryExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -60,8 +61,8 @@ class KinopoiskApiService {
      * @param filmId id of film from kinopoisk.
      * @param page page of results.
      */
-    fun getKPReviews(filmId: Int, page: Int): ReviewListExt {
-        return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
+    fun getKPReviews(filmId: Int, page: Int, proxy: Proxy? = Proxy.NO_PROXY): ReviewListExt {
+        return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java, proxy)
             .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -70,8 +71,8 @@ class KinopoiskApiService {
      *
      * @param peopleId id of people from kinopoisk.
      */
-    fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
-        return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
+    fun getKPPeopleDetailView(peopleId: Int, proxy: Proxy? = Proxy.NO_PROXY): PeopleExt {
+        return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java, proxy)
             .let { PeopleExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -81,8 +82,8 @@ class KinopoiskApiService {
      * @param page page of results.
      * @param type type of top. E.g. POPULAR_FILMS, BEST_FILMS, AWAIT_FILMS.
      */
-    fun getKPTop(page: Int, type: Type): TopExt {
-        return kpApiClientService.request("$GET_TOP?page=$page&type=${type.type}", TopExt::class.java)
+    fun getKPTop(page: Int, type: Type, proxy: Proxy? = Proxy.NO_PROXY): TopExt {
+        return kpApiClientService.request("$GET_TOP?page=$page&type=${type.type}", TopExt::class.java, proxy)
             .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -92,10 +93,10 @@ class KinopoiskApiService {
      * @param keyword for searching.
      * @param page page of results.
      */
-    fun getKPSearchInFilms(keyword: String, page: Int): SearchFimResultExt {
+    fun getKPSearchInFilms(keyword: String, page: Int, proxy: Proxy? = Proxy.NO_PROXY): SearchFimResultExt {
         return kpApiClientService.request(
             "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper().escape(keyword)}&page=$page",
-            SearchFimResultExt::class.java
+            SearchFimResultExt::class.java, proxy
         ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -105,10 +106,10 @@ class KinopoiskApiService {
      * @param keyword for searching.
      * @param page page of results.
      */
-    fun getKPSearchInPeople(keyword: String, page: Int): SearchPeopleResultExt {
+    fun getKPSearchInPeople(keyword: String, page: Int, proxy: Proxy? = Proxy.NO_PROXY): SearchPeopleResultExt {
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper().escape(keyword)}&page=$page",
-            SearchPeopleResultExt::class.java
+            SearchPeopleResultExt::class.java, proxy
         ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -117,9 +118,9 @@ class KinopoiskApiService {
      *
      * @param reviewId id of review from kinopoisk.
      */
-    fun getReviewDetail(reviewId: Int): ReviewExt {
+    fun getReviewDetail(reviewId: Int, proxy: Proxy? = Proxy.NO_PROXY): ReviewExt {
         return kpApiClientService.request(
-            "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
+            "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java, proxy
         ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
     }
 }
