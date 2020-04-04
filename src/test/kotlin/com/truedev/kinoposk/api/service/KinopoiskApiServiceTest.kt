@@ -7,7 +7,7 @@ import org.junit.Test
 
 class KinopoiskApiServiceTest {
 
-    private val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService(5)
+    private val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService()
 
     @Test
     fun getFilmInfo() {
