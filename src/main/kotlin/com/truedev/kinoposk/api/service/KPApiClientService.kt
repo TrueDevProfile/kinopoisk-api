@@ -9,7 +9,7 @@ import com.truedev.kinoposk.api.model.ResponseExt
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-internal class KPApiClientService {
+internal class KPApiClientService(private val timeout: Int) {
     private val mapper: ObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     companion object {
@@ -34,14 +34,21 @@ internal class KPApiClientService {
         val key = (path + ts + SALT).md5()
         val (_, response, result) = (API_URL + path)
             .httpGet()
+            .timeout(timeout)
+            .timeoutRead(timeout)
             .header(getHeaders(ts, key))
             .responseString()
 
-        val entityExt = when (result) {
-            is Result.Failure -> null
-            is Result.Success -> mapper.readValue(result.get(), clazz)
+        return when (result) {
+            is Result.Failure -> ResponseExt(
+                resultCode = response.statusCode,
+                message = result.error.message ?: response.responseMessage
+            )
+            is Result.Success -> {
+                val entityExt = mapper.readValue(result.get(), clazz)
+                ResponseExt(resultCode = response.statusCode, message = response.responseMessage, response = entityExt)
+            }
         }
-        return ResponseExt(resultCode = response.statusCode, message = response.responseMessage, response = entityExt)
     }
 
     private fun getHeaders(ts: String, key: String): Map<String, String> {
