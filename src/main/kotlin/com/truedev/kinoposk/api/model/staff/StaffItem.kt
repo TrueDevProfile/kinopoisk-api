@@ -9,7 +9,7 @@ data class StaffItem(
     val id: Int = 0,
     val nameRU: String = "",
     val nameEN: String = "",
-    val posterUrl: String? = "https://st.kp.yandex.net/images/actor_iphone/iphone360_$id.jpg",
+    val posterUrl: String? = "https://st.kp.yandex.net/images/actor/$id.jpg",
     val description: String? = null,
     val professionText: String = "",
     @JsonDeserialize(using = StringToProfessionDeserializer::class)

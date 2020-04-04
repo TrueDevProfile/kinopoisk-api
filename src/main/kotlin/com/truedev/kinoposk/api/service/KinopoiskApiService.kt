@@ -21,8 +21,8 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
 
-class KinopoiskApiService {
-    private val kpApiClientService: KPApiClientService = KPApiClientService()
+class KinopoiskApiService(timeout: Int = 15000) {
+    private val kpApiClientService: KPApiClientService = KPApiClientService(timeout)
 
     /**
      * This method retrieves film info.
