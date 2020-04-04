@@ -20,7 +20,7 @@ class KinopoiskApiServiceTest {
     fun getStaffList() {
         val staffList = kinopoiskApiService.getStaffList(221027)
 
-        assertTrue(staffList.data?.creators!!.isNotEmpty())
+        assertTrue(staffList.data?.staffItems!!.isNotEmpty())
     }
 
     @Test
