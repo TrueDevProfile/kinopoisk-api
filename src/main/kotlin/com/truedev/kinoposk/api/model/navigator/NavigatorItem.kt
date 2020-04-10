@@ -1,17 +1,18 @@
-package com.truedev.kinoposk.api.model.search.film
+package com.truedev.kinoposk.api.model.navigator
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
+import com.truedev.kinoposk.api.model.deserializer.StringToNavigatorItemTypeDeserializer
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class SearchFilm(
+data class NavigatorItem(
     val id: Int = 0,
     val nameRU: String = "",
     val nameEN: String = "",
+    @JsonDeserialize(using = StringToNavigatorItemTypeDeserializer::class)
+    val type: NavigatorItemType = NavigatorItemType.UNKNOWN,
     val year: String = "",
-    val description: String = "",
-    val filmLength: String = "",
     val country: String = "",
     val genre: String = "",
     val rating: String = "",

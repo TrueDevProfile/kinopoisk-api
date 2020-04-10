@@ -1,5 +1,6 @@
 package com.truedev.kinoposk.api.service
 
+import com.truedev.kinoposk.api.model.navigator.filter.Order
 import com.truedev.kinoposk.api.model.top.Type
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -88,5 +89,26 @@ class KinopoiskApiServiceTest {
         val kpSearchInPeople = kinopoiskApiService.getKPSearchInPeople("Robert De", 1)
 
         assertTrue(kpSearchInPeople.data?.searchPeople!!.isNotEmpty())
+    }
+
+    @Test
+    fun getBestFilmsList() {
+        val kpBestFilmsList = kinopoiskApiService.getBestFilmsList()
+
+        assertTrue(kpBestFilmsList.data?.items!!.isNotEmpty())
+    }
+
+    @Test
+    fun getNavigatorFilters() {
+        val kpNavigatorFilters = kinopoiskApiService.getNavigatorFilters()
+
+        assertTrue(kpNavigatorFilters.data?.country!!.isNotEmpty())
+        assertTrue(kpNavigatorFilters.data?.genre!!.isNotEmpty())
+    }
+
+    @Test
+    fun getNavigator() {
+        val kpNavigator = kinopoiskApiService.getNavigator(1, 1, Order.RATING, 1)
+        assertTrue(kpNavigator.data?.items!!.isNotEmpty())
     }
 }
