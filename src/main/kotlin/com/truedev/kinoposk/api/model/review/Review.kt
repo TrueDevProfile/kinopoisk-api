@@ -7,13 +7,13 @@ import java.time.LocalDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Review(
-    val reviewID: Int = 0,
+    val reviewID: Int? = null,
     val reviewType: String = "",
     val userPositiveRating: Int? = null,
     val userNegativeRating: Int? = null,
     @JsonDeserialize(using = StringToLocalDateTimeDeserializer::class)
     val reviewData: LocalDateTime? = null,
-    val reviewAutor: String = "",
+    val reviewAutor: String? = null,
     val reviewTitle: String = "",
     val reviewDescription: String = ""
 )
