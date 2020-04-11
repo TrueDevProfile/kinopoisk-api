@@ -89,4 +89,25 @@ class KinopoiskApiServiceTest {
 
         assertTrue(kpSearchInPeople.data?.searchPeople!!.isNotEmpty())
     }
+
+    @Test
+    fun getBestFilmsList() {
+        val kpBestFilmsList = kinopoiskApiService.getBestFilmsList()
+
+        assertTrue(kpBestFilmsList.data?.items!!.isNotEmpty())
+    }
+
+    @Test
+    fun getNavigatorFilters() {
+        val kpNavigatorFilters = kinopoiskApiService.getNavigatorFilters()
+
+        assertTrue(kpNavigatorFilters.data?.country!!.isNotEmpty())
+        assertTrue(kpNavigatorFilters.data?.genre!!.isNotEmpty())
+    }
+
+    @Test
+    fun getNavigator() {
+        val kpNavigator = kinopoiskApiService.getNavigator(ratingFrom = 7, yearFrom = 2015)
+        assertTrue(kpNavigator.data?.items!!.isNotEmpty())
+    }
 }

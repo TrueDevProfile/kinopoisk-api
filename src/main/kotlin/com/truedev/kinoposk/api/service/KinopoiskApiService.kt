@@ -2,7 +2,11 @@ package com.truedev.kinoposk.api.service
 
 import com.google.common.net.UrlEscapers
 import com.truedev.kinoposk.api.model.film.FilmExt
+import com.truedev.kinoposk.api.model.filmlists.BestFilmsList
 import com.truedev.kinoposk.api.model.gallery.GalleryExt
+import com.truedev.kinoposk.api.model.navigator.NavigatorExt
+import com.truedev.kinoposk.api.model.navigator.filter.NavigatorFiltersExt
+import com.truedev.kinoposk.api.model.navigator.filter.Order
 import com.truedev.kinoposk.api.model.people.PeopleExt
 import com.truedev.kinoposk.api.model.review.ReviewListExt
 import com.truedev.kinoposk.api.model.review.details.ReviewExt
@@ -11,15 +15,19 @@ import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_BEST_FILMS_LIST
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM_STAFF
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_GALLERY
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_NAVIGATOR
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_NAVIGATOR_FILTERS
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_PEOPLE_DETAIL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEWS
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_DETAIL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
+import java.net.URLEncoder
 
 class KinopoiskApiService(timeout: Int = 15000) {
     private val kpApiClientService: KPApiClientService = KPApiClientService(timeout)
@@ -80,9 +88,10 @@ class KinopoiskApiService(timeout: Int = 15000) {
      *
      * @param page page of results.
      * @param type type of top. E.g. POPULAR_FILMS, BEST_FILMS, AWAIT_FILMS.
+     * @param listId id of sub list from [getBestFilmsList]
      */
-    fun getKPTop(page: Int, type: Type): TopExt {
-        return kpApiClientService.request("$GET_TOP?page=$page&type=${type.type}", TopExt::class.java)
+    fun getKPTop(page: Int = 1, type: Type, listId: Int = 0): TopExt {
+        return kpApiClientService.request("$GET_TOP?page=$page&listID=$listId&type=${type.type}", TopExt::class.java)
             .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -121,5 +130,61 @@ class KinopoiskApiService(timeout: Int = 15000) {
         return kpApiClientService.request(
             "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
         ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
+    }
+
+    /**
+     * This method retrieves different names of lists best films.
+     * Default returns all best films lists. If set id of list, then returns sub lists.
+     * Use @see [getKPTop] to get films from sub lists
+     *
+     * @param listId id of named list from kinopoisk.
+     */
+    fun getBestFilmsList(listId: Int = 0): BestFilmsList {
+        return kpApiClientService.request(
+            "$GET_BEST_FILMS_LIST?listID=$listId&region_id=20615", BestFilmsList::class.java
+        ).let { BestFilmsList(it.resultCode, it.message, it.response?.data) }
+    }
+
+    /**
+     * This method retrieves inner kinopoisk ids for countries/genres.
+     *
+     */
+    fun getNavigatorFilters(): NavigatorFiltersExt {
+        return kpApiClientService.request(
+            "$GET_NAVIGATOR_FILTERS?region_id=20615", NavigatorFiltersExt::class.java
+        ).let {
+            NavigatorFiltersExt(
+                it.resultCode,
+                it.message,
+                it.response?.data
+            )
+        }
+    }
+
+    /**
+     * Advanced search of films by filters.
+     *
+     */
+    fun getNavigator(
+        countryIds: List<Int> = emptyList(),
+        genreIds: List<Int> = emptyList(),
+        order: Order = Order.RATING,
+        ratingFrom: Int = 0,
+        ratingTo: Int = 10,
+        yearFrom: Int = 1900,
+        yearTo: Int = 2050,
+        page: Int = 1
+    ): NavigatorExt {
+        return kpApiClientService.request(
+            "$GET_NAVIGATOR?country=${URLEncoder.encode(countryIds.joinToString(separator = ","), "UTF-8")}&" +
+                    "genre=${URLEncoder.encode(genreIds.joinToString(separator = ","), "UTF-8")}&" +
+                    "order=${URLEncoder.encode(order.queryNameParam, "UTF-8")}&" +
+                    "page=$page&" +
+                    "rating=${URLEncoder.encode("$ratingFrom:$ratingTo", "UTF-8")}&" +
+                    "years=${URLEncoder.encode("$yearFrom:$yearTo", "UTF-8")}&" +
+                    "region_id=20615&" +
+                    "type=all",
+            NavigatorExt::class.java
+        ).let { NavigatorExt(it.resultCode, it.message, it.response?.data) }
     }
 }

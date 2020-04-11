@@ -27,6 +27,9 @@ internal class KPApiClientService(private val timeout: Int) {
         const val GET_GLOBAL_SEARCH = "getKPGlobalSearch"
         const val GET_SEARCH_FILM = "getKPSearchInFilms"
         const val GET_SEARCH_PEOPLE = "getKPSearchInPeople"
+        const val GET_BEST_FILMS_LIST = "getBestFilmsList"
+        const val GET_NAVIGATOR_FILTERS = "navigatorFilters"
+        const val GET_NAVIGATOR = "navigator"
     }
 
     fun <T> request(path: String, clazz: Class<T>): ResponseExt<T> {
