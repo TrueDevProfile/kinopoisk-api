@@ -7,6 +7,6 @@ import com.truedev.kinoposk.api.model.navigator.NavigatorItemType
 
 class StringToNavigatorItemTypeDeserializer : JsonDeserializer<NavigatorItemType>() {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): NavigatorItemType {
-        return NavigatorItemType.fromString(p.text.toUpperCase())
+        return NavigatorItemType.fromString(p.text)
     }
 }
