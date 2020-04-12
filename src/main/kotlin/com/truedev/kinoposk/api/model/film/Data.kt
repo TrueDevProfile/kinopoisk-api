@@ -3,6 +3,7 @@ package com.truedev.kinoposk.api.model.film
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
+import com.truedev.kinoposk.api.model.staff.StaffItem
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Data(
@@ -25,5 +26,8 @@ data class Data(
     val ratingMPAA: String? = null,
     val ratingAgeLimits: Int? = null,
     val rentData: RentData = RentData(),
-    val budgetData: BudgetData = BudgetData()
+    val budgetData: BudgetData = BudgetData(),
+    val isIMAX: Boolean = false,
+    val is3D: Boolean = false,
+    val creators: List<List<StaffItem>> = emptyList()
 )
