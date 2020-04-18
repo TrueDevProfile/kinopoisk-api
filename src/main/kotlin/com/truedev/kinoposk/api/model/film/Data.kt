@@ -16,7 +16,7 @@ data class Data(
     val nameRU: String = "",
     val nameEN: String = "",
     val year: String = "",
-    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$filmID",
+    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$filmID.jpg",
     val filmLength: String? = null,
     val country: String = "",
     val genre: String = "",

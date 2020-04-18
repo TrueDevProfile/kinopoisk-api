@@ -18,5 +18,5 @@ data class NavigatorItem(
     val rating: String = "",
     @JsonDeserialize(using = StringToIntDeserializer::class)
     val ratingVoteCount: Int = 0,
-    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id"
+    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id.jpg"
 )

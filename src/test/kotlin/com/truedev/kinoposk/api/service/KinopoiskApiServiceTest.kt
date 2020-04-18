@@ -1,5 +1,6 @@
 package com.truedev.kinoposk.api.service
 
+import com.truedev.kinoposk.api.model.navigator.filter.Order
 import com.truedev.kinoposk.api.model.top.Type
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -107,7 +108,12 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getNavigator() {
-        val kpNavigator = kinopoiskApiService.getNavigator(ratingFrom = 7, yearFrom = 2015)
+        val kpNavigator = kinopoiskApiService.getNavigator(
+            genreIds = listOf(1750),
+            ratingFrom = 5,
+            yearFrom = 2000,
+            order = Order.NUM_VOTE
+        )
         assertTrue(kpNavigator.data?.items!!.isNotEmpty())
     }
 }
