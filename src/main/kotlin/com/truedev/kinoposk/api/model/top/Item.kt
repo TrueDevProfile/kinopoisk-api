@@ -16,7 +16,7 @@ data class Item(
     val rating: String = "",
     @JsonDeserialize(using = StringToIntDeserializer::class)
     val ratingVoteCount: Int = 0,
-    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id",
+    val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$id.jpg",
     val videoURL: VideoUrl = VideoUrl(),
     val ratingChange: Int = 0,
     val isRatingUP: Int = 0,
