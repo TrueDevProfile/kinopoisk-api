@@ -18,6 +18,13 @@ class KinopoiskApiServiceTest {
     }
 
     @Test
+    fun getTvShowInfo() {
+        val filmInfo = kinopoiskApiService.getFilmInfo(1261996)
+
+        assertEquals(1261996, filmInfo.data?.filmID)
+    }
+
+    @Test
     fun getStaffList() {
         val staffList = kinopoiskApiService.getStaffList(221027)
 
@@ -58,21 +65,21 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun getKPTopBestFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.BEST_FILMS)
+        val kpTop = kinopoiskApiService.getKPTop(Type.BEST_FILMS, 1)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
 
     @Test
     fun getKPTopPopularFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.POPULAR_FILMS)
+        val kpTop = kinopoiskApiService.getKPTop(Type.POPULAR_FILMS, 1)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
 
     @Test
     fun getKPTopAwaitFilms() {
-        val kpTop = kinopoiskApiService.getKPTop(1, Type.AWAIT_FILMS)
+        val kpTop = kinopoiskApiService.getKPTop(Type.AWAIT_FILMS, 1)
 
         assertTrue(kpTop.data?.items!!.isNotEmpty())
     }
