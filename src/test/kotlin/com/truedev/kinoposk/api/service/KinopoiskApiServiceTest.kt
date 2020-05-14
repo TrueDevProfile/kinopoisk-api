@@ -18,6 +18,13 @@ class KinopoiskApiServiceTest {
     }
 
     @Test
+    fun getTvShowInfo() {
+        val filmInfo = kinopoiskApiService.getFilmInfo(1261996)
+
+        assertEquals(1261996, filmInfo.data?.filmID)
+    }
+
+    @Test
     fun getStaffList() {
         val staffList = kinopoiskApiService.getStaffList(221027)
 

@@ -11,7 +11,7 @@ data class NavigatorItem(
     val nameRU: String = "",
     val nameEN: String = "",
     @JsonDeserialize(using = StringToNavigatorItemTypeDeserializer::class)
-    val type: NavigatorItemType = NavigatorItemType.UNKNOWN,
+    val type: KinopoiskItemType = KinopoiskItemType.UNKNOWN,
     val year: String = "",
     val country: String = "",
     val genre: String = "",
