@@ -38,7 +38,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param filmId id of film from kinopoisk.
      */
     fun getFilmInfo(filmId: Int): FilmExt {
-        require(filmId >= 0) { "Films with a negative id do not exist" }
+        require(filmId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java)
             .let { FilmExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -49,7 +49,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param filmId id of film from kinopoisk.
      */
     fun getStaffList(filmId: Int): StaffExt {
-        require(filmId >= 0) { "Films with a negative id do not exist" }
+        require(filmId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
             .let { StaffExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -60,7 +60,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param filmId id of film from kinopoisk.
      */
     fun getGallery(filmId: Int): GalleryExt {
-        require(filmId >= 0) { "Films with negative a id do not exist" }
+        require(filmId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
             .let { GalleryExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -72,8 +72,8 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param page page of results.
      */
     fun getKPReviews(filmId: Int, page: Int = 1): ReviewListExt {
-        require(filmId >= 0) { "Films with a negative id do not exist" }
-        require(page > 0) { "Negative page does not exist" }
+        require(filmId > 0) { "Film id should be more than 0" }
+        require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
             .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -84,7 +84,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param peopleId id of people from kinopoisk.
      */
     fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
-        require(peopleId >= 0) { "People with a negative id do not exist" }
+        require(peopleId > 0) { "People id should be more than 0" }
         return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
             .let { PeopleExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -97,7 +97,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param listId id of sub list from [getBestFilmsList]
      */
     fun getKPTop(type: Type, page: Int = 1, listId: Int = 0): TopExt {
-        require(page > 0) { "Negative page does not exist" }
+        require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request("$GET_TOP?page=$page&listID=$listId&type=${type.type}", TopExt::class.java)
             .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -109,7 +109,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param page page of results.
      */
     fun getKPSearchInFilms(keyword: String, page: Int = 1): SearchFimResultExt {
-        require(page > 0) { "Negative page does not exist" }
+        require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper()
                 .escape(keyword.filter { it.isLetterOrDigit() })}&page=$page",
@@ -124,7 +124,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param page page of results.
      */
     fun getKPSearchInPeople(keyword: String, page: Int = 1): SearchPeopleResultExt {
-        require(page > 0) { "Negative page does not exist" }
+        require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper()
                 .escape(keyword.filter { it.isLetterOrDigit() })}&page=$page",
@@ -138,7 +138,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      * @param reviewId id of review from kinopoisk.
      */
     fun getReviewDetail(reviewId: Int): ReviewExt {
-        require(reviewId >= 0) { "Reviews with a negative id do not exist" }
+        require(reviewId > 0) { "Review id should be more than 0" }
         return kpApiClientService.request(
             "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
         ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
@@ -187,7 +187,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
         yearTo: Int = 2050,
         page: Int = 1
     ): NavigatorExt {
-        require(page > 0) { "Negative page does not exist" }
+        require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             "$GET_NAVIGATOR?country=${URLEncoder.encode(countryIds.joinToString(separator = ","), "UTF-8")}&" +
                     "genre=${URLEncoder.encode(genreIds.joinToString(separator = ","), "UTF-8")}&" +
