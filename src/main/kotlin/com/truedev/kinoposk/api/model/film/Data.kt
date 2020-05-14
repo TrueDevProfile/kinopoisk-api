@@ -3,7 +3,7 @@ package com.truedev.kinoposk.api.model.film
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
-import com.truedev.kinoposk.api.model.deserializer.StringToNavigatorItemTypeDeserializer
+import com.truedev.kinoposk.api.model.deserializer.StringToKinopoiskItemTypeDeserializer
 import com.truedev.kinoposk.api.model.navigator.KinopoiskItemType
 import com.truedev.kinoposk.api.model.staff.StaffItem
 
@@ -18,7 +18,7 @@ data class Data(
     val nameRU: String = "",
     val nameEN: String = "",
     val year: String = "",
-    @JsonDeserialize(using = StringToNavigatorItemTypeDeserializer::class)
+    @JsonDeserialize(using = StringToKinopoiskItemTypeDeserializer::class)
     val type: KinopoiskItemType = KinopoiskItemType.UNKNOWN,
     val seriesInfo: SeriesInfo? = null,
     val bigPosterUrl: String = "https://st.kp.yandex.net/images/film_big/$filmID.jpg",

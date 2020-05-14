@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.truedev.kinoposk.api.model.navigator.KinopoiskItemType
 
-class StringToNavigatorItemTypeDeserializer : JsonDeserializer<KinopoiskItemType>() {
+class StringToKinopoiskItemTypeDeserializer : JsonDeserializer<KinopoiskItemType>() {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): KinopoiskItemType {
         return KinopoiskItemType.fromString(p.text)
     }
