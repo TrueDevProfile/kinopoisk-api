@@ -112,7 +112,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper()
-                .escape(keyword.replace("\\W".toRegex(), " "))}&page=$page",
+                .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
             SearchFimResultExt::class.java
         ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -127,7 +127,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper()
-                .escape(keyword.replace("\\W".toRegex(), " "))}&page=$page",
+                .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
             SearchPeopleResultExt::class.java
         ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
     }
