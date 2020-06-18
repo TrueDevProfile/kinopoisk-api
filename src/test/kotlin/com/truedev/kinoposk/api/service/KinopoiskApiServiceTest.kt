@@ -3,6 +3,7 @@ package com.truedev.kinoposk.api.service
 import com.truedev.kinoposk.api.model.navigator.KinopoiskItemType
 import com.truedev.kinoposk.api.model.navigator.filter.Order
 import com.truedev.kinoposk.api.model.top.Type
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -177,5 +178,28 @@ class KinopoiskApiServiceTest {
             order = Order.NUM_VOTE
         )
         assertTrue(kpNavigator.data?.items!!.isNotEmpty())
+    }
+
+    @Test
+    fun getDigital() {
+        val kpDigital = kinopoiskApiService.getDigital()
+
+        assertTrue(kpDigital.data?.items!!.isNotEmpty())
+        assertTrue(kpDigital.data?.stats?.offset == 0)
+    }
+
+    @Test
+    fun getDigitalWithCustomOffset() {
+        val kpDigital = kinopoiskApiService.getDigital(offset = 10)
+
+        assertTrue(kpDigital.data?.items!!.isNotEmpty())
+        assertTrue(kpDigital.data?.stats?.offset == 10)
+    }
+    @Test
+    fun getDigitalWithCustomDate() {
+        val kpDigital = kinopoiskApiService.getDigital(digitalReleaseMonth = LocalDate.of(2019, 12, 1))
+
+        assertTrue(kpDigital.data?.items!!.isNotEmpty())
+        assertTrue(kpDigital.data?.stats?.offset == 0)
     }
 }

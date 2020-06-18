@@ -8,6 +8,7 @@ import com.truedev.kinoposk.api.model.navigator.NavigatorExt
 import com.truedev.kinoposk.api.model.navigator.filter.NavigatorFiltersExt
 import com.truedev.kinoposk.api.model.navigator.filter.Order
 import com.truedev.kinoposk.api.model.people.PeopleExt
+import com.truedev.kinoposk.api.model.releases.DigitalReleaseExt
 import com.truedev.kinoposk.api.model.review.ReviewListExt
 import com.truedev.kinoposk.api.model.review.details.ReviewExt
 import com.truedev.kinoposk.api.model.search.film.SearchFimResultExt
@@ -16,6 +17,7 @@ import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_BEST_FILMS_LIST
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_DIGITAL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM_STAFF
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_GALLERY
@@ -27,7 +29,9 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
+import java.lang.String.valueOf
 import java.net.URLEncoder
+import java.time.LocalDate
 
 class KinopoiskApiService(timeout: Int = 15000) {
     private val kpApiClientService: KPApiClientService = KPApiClientService(timeout)
@@ -199,5 +203,34 @@ class KinopoiskApiService(timeout: Int = 15000) {
                     "type=all",
             NavigatorExt::class.java
         ).let { NavigatorExt(it.resultCode, it.message, it.response?.data) }
+    }
+
+    /**
+     * This method retrieves digital releases https://www.kinopoisk.ru/comingsoon/digital/.
+     *
+     */
+    fun getDigital(
+        digitalReleaseMonth: LocalDate = LocalDate.now(),
+        limit: Int = 10,
+        offset: Int = 0
+    ): DigitalReleaseExt {
+        val month = when {
+            digitalReleaseMonth.monthValue < 10 ->
+                "0" + valueOf(digitalReleaseMonth.monthValue)
+            else -> valueOf(digitalReleaseMonth.monthValue)
+        }
+        return kpApiClientService.requestDigitalReleases(
+            "$GET_DIGITAL?digitalReleaseMonth=$month.${digitalReleaseMonth.year}&" +
+                    "limit=$limit&" +
+                    "offset=$offset&" +
+                    "region_id=20615",
+            DigitalReleaseExt::class.java
+        ).let {
+            DigitalReleaseExt(
+                it.resultCode,
+                it.message,
+                it.response?.data
+            )
+        }
     }
 }
