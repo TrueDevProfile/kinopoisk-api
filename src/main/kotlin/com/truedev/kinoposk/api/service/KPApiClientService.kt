@@ -13,8 +13,8 @@ internal class KPApiClientService(private val timeout: Int) {
     private val mapper: ObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     companion object {
-        private const val API_URL = "https://ext.kinopoisk.ru/ios/5.0.0/"
-        private const val RELEASE_URL = "https://ma.kinopoisk.ru"
+        const val MAIN_API_URL = "https://ext.kinopoisk.ru/ios/5.0.0/"
+        const val RELEASE_API_URL = "https://ma.kinopoisk.ru"
         private const val SALT = "IDATevHDS7"
 
         const val GET_FILM = "getKPFilmDetailView"
@@ -34,33 +34,10 @@ internal class KPApiClientService(private val timeout: Int) {
         const val GET_DIGITAL = "/k/v1/films/releases/digital"
     }
 
-    fun <T> request(path: String, clazz: Class<T>): ResponseExt<T> {
+    fun <T> request(url: String, path: String, clazz: Class<T>): ResponseExt<T> {
         val ts = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli().toString()
         val key = (path + ts + SALT).md5()
-        val (_, response, result) = (API_URL + path)
-            .httpGet()
-            .timeout(timeout)
-            .timeoutRead(timeout)
-            .header(getHeaders(ts, key))
-            .responseString()
-
-        return when (result) {
-            is Result.Failure -> ResponseExt(
-                resultCode = response.statusCode,
-                message = result.error.message ?: response.responseMessage
-            )
-            is Result.Success -> {
-                val entityExt = mapper.readValue(result.get(), clazz)
-                ResponseExt(resultCode = response.statusCode, message = response.responseMessage, response = entityExt)
-            }
-        }
-    }
-
-    // todo refactor and combine
-    fun <T> requestDigitalReleases(path: String, clazz: Class<T>): ResponseExt<T> {
-        val ts = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli().toString()
-        val key = (path + ts + SALT).md5()
-        val (_, response, result) = (RELEASE_URL + path)
+        val (_, response, result) = (url + path)
             .httpGet()
             .timeout(timeout)
             .timeoutRead(timeout)

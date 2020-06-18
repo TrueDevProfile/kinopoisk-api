@@ -29,6 +29,8 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.RELEASE_API_URL
 import java.lang.String.valueOf
 import java.net.URLEncoder
 import java.time.LocalDate
@@ -43,7 +45,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getFilmInfo(filmId: Int): FilmExt {
         require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request("$GET_FILM?filmID=$filmId", FilmExt::class.java)
+        return kpApiClientService.request(MAIN_API_URL, "$GET_FILM?filmID=$filmId", FilmExt::class.java)
             .let { FilmExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -54,7 +56,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getStaffList(filmId: Int): StaffExt {
         require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request("$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
+        return kpApiClientService.request(MAIN_API_URL, "$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
             .let { StaffExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -65,7 +67,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getGallery(filmId: Int): GalleryExt {
         require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request("$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
+        return kpApiClientService.request(MAIN_API_URL, "$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
             .let { GalleryExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -78,7 +80,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
     fun getKPReviews(filmId: Int, page: Int = 1): ReviewListExt {
         require(filmId > 0) { "Film id should be more than 0" }
         require(page > 0) { "Page should be more than 0" }
-        return kpApiClientService.request("$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
+        return kpApiClientService.request(MAIN_API_URL, "$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
             .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -89,7 +91,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
         require(peopleId > 0) { "People id should be more than 0" }
-        return kpApiClientService.request("$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
+        return kpApiClientService.request(MAIN_API_URL, "$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
             .let { PeopleExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -102,7 +104,11 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getKPTop(type: Type, page: Int = 1, listId: Int = 0): TopExt {
         require(page > 0) { "Page should be more than 0" }
-        return kpApiClientService.request("$GET_TOP?page=$page&listID=$listId&type=${type.type}", TopExt::class.java)
+        return kpApiClientService.request(
+            MAIN_API_URL,
+            "$GET_TOP?page=$page&listID=$listId&type=${type.type}",
+            TopExt::class.java
+        )
             .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -115,6 +121,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
     fun getKPSearchInFilms(keyword: String, page: Int = 1): SearchFimResultExt {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper()
                 .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
             SearchFimResultExt::class.java
@@ -130,6 +137,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
     fun getKPSearchInPeople(keyword: String, page: Int = 1): SearchPeopleResultExt {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper()
                 .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
             SearchPeopleResultExt::class.java
@@ -144,6 +152,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
     fun getReviewDetail(reviewId: Int): ReviewExt {
         require(reviewId > 0) { "Review id should be more than 0" }
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
         ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -157,6 +166,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getBestFilmsList(listId: Int = 0): BestFilmsList {
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_BEST_FILMS_LIST?listID=$listId&region_id=20615", BestFilmsList::class.java
         ).let { BestFilmsList(it.resultCode, it.message, it.response?.data) }
     }
@@ -167,6 +177,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
      */
     fun getNavigatorFilters(): NavigatorFiltersExt {
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_NAVIGATOR_FILTERS?region_id=20615", NavigatorFiltersExt::class.java
         ).let {
             NavigatorFiltersExt(
@@ -193,6 +204,7 @@ class KinopoiskApiService(timeout: Int = 15000) {
     ): NavigatorExt {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
+            MAIN_API_URL,
             "$GET_NAVIGATOR?country=${URLEncoder.encode(countryIds.joinToString(separator = ","), "UTF-8")}&" +
                     "genre=${URLEncoder.encode(genreIds.joinToString(separator = ","), "UTF-8")}&" +
                     "order=${URLEncoder.encode(order.queryNameParam, "UTF-8")}&" +
@@ -219,7 +231,8 @@ class KinopoiskApiService(timeout: Int = 15000) {
                 "0" + valueOf(digitalReleaseMonth.monthValue)
             else -> valueOf(digitalReleaseMonth.monthValue)
         }
-        return kpApiClientService.requestDigitalReleases(
+        return kpApiClientService.request(
+            RELEASE_API_URL,
             "$GET_DIGITAL?digitalReleaseMonth=$month.${digitalReleaseMonth.year}&" +
                     "limit=$limit&" +
                     "offset=$offset&" +
