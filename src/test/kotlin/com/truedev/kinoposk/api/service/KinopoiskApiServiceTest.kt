@@ -181,7 +181,7 @@ class KinopoiskApiServiceTest {
     }
 
     @Test
-    fun getDigital() {
+    fun `test getDigital will return data when default params`() {
         val kpDigital = kinopoiskApiService.getDigital()
 
         assertTrue(kpDigital.data?.items!!.isNotEmpty())
@@ -189,14 +189,15 @@ class KinopoiskApiServiceTest {
     }
 
     @Test
-    fun getDigitalWithCustomOffset() {
+    fun `test getDigital will return data when custom offset`() {
         val kpDigital = kinopoiskApiService.getDigital(offset = 10)
 
         assertTrue(kpDigital.data?.items!!.isNotEmpty())
         assertTrue(kpDigital.data?.stats?.offset == 10)
     }
+
     @Test
-    fun getDigitalWithCustomDate() {
+    fun `test getDigital will return data when custom date`() {
         val kpDigital = kinopoiskApiService.getDigital(digitalReleaseMonth = LocalDate.of(2019, 12, 1))
 
         assertTrue(kpDigital.data?.items!!.isNotEmpty())
