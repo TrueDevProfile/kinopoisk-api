@@ -65,6 +65,6 @@ or pom.xml
 
 ## WEB Api 
 
-All this methods and more are available via web api https://kinopoiskapiunofficial.tech
+All these methods and more are available via web API https://kinopoiskapiunofficial.tech
 
 
