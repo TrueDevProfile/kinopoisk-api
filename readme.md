@@ -5,7 +5,7 @@
 
 # Kinopoisk Api
 
-Library for simply accessing to the kinopoisk api. This library uses an unofficial way, pretending to be an android device.
+A library for easy access to the Kinopoisk data.
  
 ## How to use
 * Add the JitPack repository to your build file 
@@ -43,7 +43,7 @@ or pom.xml
     	<artifactId>kinopoisk-api</artifactId>
     	<version>0.2.0-beta.6</version>
     </dependency>	
-* Now you can use api. E.g. you can get film info by id 
+* After that you can use library's methods. E.g. to get film by kinopoisk id:
 
         KinopoiskApiService kinopoiskExtApiService = new KinopoiskApiService();
         FilmExt filmInfo = kinopoiskExtApiService.getFilmInfo(1234); 
@@ -52,16 +52,19 @@ or pom.xml
 ## Api methods
 
 * `kinopoiskExtApiService.getFilmInfo(filmId)` retrieves all data about the film by id.
-* `kinopoiskExtApiService.getStaffList(filmId)` retrieves data about the staff (actors,producers and so on) by film id.
-* `kinopoiskExtApiService.getGallery(filmId)` retrieves gallery according to film id.
+* `kinopoiskExtApiService.getStaffList(filmId)` retrieves data about the staff (actors, producers and so on) by film id.
+* `kinopoiskExtApiService.getGallery(filmId)` retrieves gallery(posters, footage for the film and so no) by film id.
 * `kinopoiskExtApiService.getKPReviews(filmId)` retrieves reviews by film id. It does not contain full review text.
+* `kinopoiskExtApiService.getReviewDetail(reviewId)` retrieves review full data by particular review id.
 * `kinopoiskExtApiService.getKPPeopleDetailView(peopleId)` retrieves detail info of staff person(actor, producer and so on).
 * `kinopoiskExtApiService.getKPTop()` retrieves top of films according the params.
 * `kinopoiskExtApiService.getKPSearchInFilms()`does a search in films by keyword.
 * `kinopoiskExtApiService.getKPSearchInPeople()`does a search in people by keyword.
+* `kinopoiskExtApiService.getNavigator()` does an advanced search of films by filters.
+* `kinopoiskExtApiService.getDigital()` retrieves digital releases for particular month/year.
 
 ## WEB Api 
 
-All methods will be available via http://kinopoiskapiunofficial.tech soon... Now only searching film by id is available.
+All these methods and more are available via web API https://kinopoiskapiunofficial.tech
 
 
