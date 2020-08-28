@@ -2,6 +2,7 @@ package com.truedev.kinoposk.api.model.review
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.truedev.kinoposk.api.model.deserializer.StringToIntDeserializer
 import com.truedev.kinoposk.api.model.deserializer.StringToLocalDateTimeDeserializer
 import java.time.LocalDateTime
 
@@ -9,7 +10,9 @@ import java.time.LocalDateTime
 data class Review(
     val reviewID: Int? = null,
     val reviewType: String = "",
+    @JsonDeserialize(using = StringToIntDeserializer::class)
     val userPositiveRating: Int? = null,
+    @JsonDeserialize(using = StringToIntDeserializer::class)
     val userNegativeRating: Int? = null,
     @JsonDeserialize(using = StringToLocalDateTimeDeserializer::class)
     val reviewData: LocalDateTime? = null,
