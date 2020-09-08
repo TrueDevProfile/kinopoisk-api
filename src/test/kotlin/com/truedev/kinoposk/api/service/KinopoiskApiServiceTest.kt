@@ -203,4 +203,11 @@ class KinopoiskApiServiceTest {
         assertTrue(kpDigital.data?.items!!.isNotEmpty())
         assertTrue(kpDigital.data?.stats?.offset == 0)
     }
+
+    @Test
+    fun `test getTvShowInfo will return empty data when id does not exist`() {
+        val tvShow = kinopoiskApiService.getTvShowInfo(922024)
+
+        assertEquals(922024, tvShow.data.contextData.id)
+    }
 }

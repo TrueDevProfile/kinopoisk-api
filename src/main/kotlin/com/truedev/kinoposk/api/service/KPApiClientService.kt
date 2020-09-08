@@ -32,6 +32,7 @@ internal class KPApiClientService(private val timeout: Int) {
         const val GET_NAVIGATOR_FILTERS = "navigatorFilters"
         const val GET_NAVIGATOR = "navigator"
         const val GET_DIGITAL = "/k/v1/films/releases/digital"
+        const val GET_TV_SHOW = "/k/v1/serial/"
     }
 
     fun <T> request(url: String, path: String, clazz: Class<T>): ResponseExt<T> {
