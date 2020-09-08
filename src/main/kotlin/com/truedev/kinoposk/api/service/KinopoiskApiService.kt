@@ -16,6 +16,7 @@ import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
+import com.truedev.kinoposk.api.model.tvshow.TvShowExt
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_BEST_FILMS_LIST
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_DIGITAL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM
@@ -29,6 +30,7 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TV_SHOW
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.RELEASE_API_URL
 import java.lang.String.valueOf
@@ -80,7 +82,11 @@ class KinopoiskApiService(timeout: Int = 15000) {
     fun getKPReviews(filmId: Int, page: Int = 1): ReviewListExt {
         require(filmId > 0) { "Film id should be more than 0" }
         require(page > 0) { "Page should be more than 0" }
-        return kpApiClientService.request(MAIN_API_URL, "$GET_REVIEWS?filmID=$filmId&page=$page", ReviewListExt::class.java)
+        return kpApiClientService.request(
+            MAIN_API_URL,
+            "$GET_REVIEWS?filmID=$filmId&page=$page",
+            ReviewListExt::class.java
+        )
             .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
 
@@ -122,8 +128,10 @@ class KinopoiskApiService(timeout: Int = 15000) {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             MAIN_API_URL,
-            "$GET_SEARCH_FILM?keyword=${UrlEscapers.urlFragmentEscaper()
-                .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
+            "$GET_SEARCH_FILM?keyword=${
+                UrlEscapers.urlFragmentEscaper()
+                    .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))
+            }&page=$page",
             SearchFimResultExt::class.java
         ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -138,8 +146,10 @@ class KinopoiskApiService(timeout: Int = 15000) {
         require(page > 0) { "Page should be more than 0" }
         return kpApiClientService.request(
             MAIN_API_URL,
-            "$GET_SEARCH_PEOPLE?keyword=${UrlEscapers.urlFragmentEscaper()
-                .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))}&page=$page",
+            "$GET_SEARCH_PEOPLE?keyword=${
+                UrlEscapers.urlFragmentEscaper()
+                    .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))
+            }&page=$page",
             SearchPeopleResultExt::class.java
         ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
     }
@@ -243,6 +253,23 @@ class KinopoiskApiService(timeout: Int = 15000) {
                 it.resultCode,
                 it.message,
                 it.response?.data
+            )
+        }
+    }
+
+    /**
+     * This method retrieves tv show data (series, seasons and so on).
+     *
+     */
+    fun getTvShowInfo(tvShowId: Int): TvShowExt {
+        require(tvShowId > 0) { "Tv show id should be more than 0" }
+        return kpApiClientService.request(
+            RELEASE_API_URL, "$GET_TV_SHOW$tvShowId",
+            TvShowExt::class.java
+        ).let {
+            TvShowExt(
+                it.response!!.success,
+                it.response.data
             )
         }
     }
