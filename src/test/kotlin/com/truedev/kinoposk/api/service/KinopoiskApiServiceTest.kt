@@ -16,7 +16,7 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun `test getFilmInfo will return valid film when id exists`() {
-        val filmInfo = kinopoiskApiService.getFilmInfo(915196)
+        val filmInfo = kinopoiskApiService.getFilmInfo(843650)
 
         assertEquals(843650, filmInfo.data?.filmID)
         assertNull(filmInfo.data?.seriesInfo)
@@ -80,7 +80,7 @@ class KinopoiskApiServiceTest {
 
     @Test
     fun `test getKPPeopleDetailView will return valid data when id exists`() {
-        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(10096)
+        val kpPeopleDetailView = kinopoiskApiService.getKPPeopleDetailView(2162346)
 
         assertEquals(2162346, kpPeopleDetailView.data?.peopleID)
     }
