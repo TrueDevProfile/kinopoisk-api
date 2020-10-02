@@ -34,5 +34,6 @@ data class Data(
     val budgetData: BudgetData = BudgetData(),
     val isIMAX: Boolean = false,
     val is3D: Boolean = false,
-    val creators: List<List<StaffItem>> = emptyList()
+    val creators: List<List<StaffItem>> = emptyList(),
+    val triviaData: List<String> = emptyList()
 )
