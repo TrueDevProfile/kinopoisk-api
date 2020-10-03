@@ -20,7 +20,7 @@ data class Item(
     // can be percent
     val rating: String?,
     @JsonDeserialize(using = StringToIntDeserializer::class)
-    val ratingVoteCount: Int,
+    val ratingVoteCount: Int?,
     val posterURL: String?,
     val filmLength: String?,
     val country: String?,
