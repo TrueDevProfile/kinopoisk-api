@@ -13,6 +13,7 @@ import com.truedev.kinoposk.api.model.review.ReviewListExt
 import com.truedev.kinoposk.api.model.review.details.ReviewExt
 import com.truedev.kinoposk.api.model.search.film.SearchFimResultExt
 import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
+import com.truedev.kinoposk.api.model.sequels.SequelExt
 import com.truedev.kinoposk.api.model.staff.StaffExt
 import com.truedev.kinoposk.api.model.top.TopExt
 import com.truedev.kinoposk.api.model.top.Type
@@ -29,6 +30,7 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEWS
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_DETAIL
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SIMILAR
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TV_SHOW
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL
@@ -270,6 +272,25 @@ class KinopoiskApiService(timeout: Int = 15000) {
             TvShowExt(
                 it.response!!.success,
                 it.response.data
+            )
+        }
+    }
+
+    /**
+     * This method retrieves sequels and prequels.
+     *
+     */
+    fun getSequelsAndPrequels(filmId: Int, page: Int): SequelExt {
+        require(filmId > 0) { "Film id should be more than 0" }
+        return kpApiClientService.request(
+            MAIN_API_URL,
+            "$GET_SIMILAR?filmID=$filmId&page=$page&region_id=20615&type=kp_sequels_and_prequels_films",
+            SequelExt::class.java
+        ).let {
+            SequelExt(
+                it.resultCode,
+                it.message,
+                it.response?.data
             )
         }
     }

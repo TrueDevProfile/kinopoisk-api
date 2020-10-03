@@ -210,4 +210,11 @@ class KinopoiskApiServiceTest {
 
         assertEquals(922024, tvShow.data.contextData.id)
     }
+
+    @Test
+    fun `test getSequelsAndPrequels will return data when film exists and sequels exist`() {
+        val sequelsAndPrequels = kinopoiskApiService.getSequelsAndPrequels(679830, 1)
+
+        assertEquals(3, sequelsAndPrequels.data!!.items.size)
+    }
 }
