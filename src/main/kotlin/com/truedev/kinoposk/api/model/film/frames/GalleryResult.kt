@@ -1,5 +1,5 @@
 package com.truedev.kinoposk.api.model.film.frames
 
-data class Gallery(
+data class GalleryResult(
     val frames: List<GalleryItem> = emptyList()
 )

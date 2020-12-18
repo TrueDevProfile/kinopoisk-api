@@ -22,7 +22,7 @@ internal class KPApiClientService(private val token: String, private val timeout
         const val SEARCH_BY_KEYWORD = "/search-by-keyword"
     }
 
-    fun <T> request(url: String, path: String, clazz: Class<T>): com.truedev.kinoposk.api.model.Result<T> {
+    fun <T> request(url: String, path: String, clazz: Class<T>): Result<T> {
         val (request, response, result) = (url + path)
             .httpGet()
             .timeout(timeout)
@@ -35,12 +35,10 @@ internal class KPApiClientService(private val token: String, private val timeout
                 httpStatus = response.statusCode,
                 error = response.responseMessage
             )
-            is com.github.kittinunf.result.Result.Success -> {
-                Result.Success(
-                    httpStatus = response.statusCode,
-                    result = mapper.readValue(result.get(), clazz)
-                )
-            }
+            is com.github.kittinunf.result.Result.Success -> Result.Success(
+                httpStatus = response.statusCode,
+                result = mapper.readValue(result.get(), clazz)
+            )
         }
     }
 }

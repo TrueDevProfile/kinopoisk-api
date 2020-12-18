@@ -6,65 +6,79 @@
 # Kinopoisk Api
 
 A library for easy access to the Kinopoisk data.
- 
-## How to use
-* Add the JitPack repository to your build file 
 
-build.gradle 
-        
-      allprojects {
-        repositories {
-        	...
-        	maven { url 'https://www.jitpack.io' }
-        }
-       }
-        	
-or pom.xml
+## Installation
 
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://www.jitpack.io</url>
-		</repository>
-	</repositories>
-
-* Add the dependency  
+* Add the JitPack repository to your build file
 
 build.gradle
 
-    dependencies {
-    	implementation 'com.github.TrueDevProfile:kinopoisk-api:0.2.0'
+```groovy
+  allprojects {
+    repositories {
+        maven { url 'https://www.jitpack.io' }
     }
-    	
-or pom.xml   
+}
+``` 
 
-    <dependency>
-        <groupId>com.github.TrueDevProfile</groupId>
-    	<artifactId>kinopoisk-api</artifactId>
-    	<version>0.2.0</version>
-    </dependency>	
-* After that you can use library's methods. E.g. to get film by kinopoisk id:
+or pom.xml
 
-        KinopoiskApiService kinopoiskExtApiService = new KinopoiskApiService();
-        FilmExt filmInfo = kinopoiskExtApiService.getFilmInfo(1234); 
+```xml
 
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://www.jitpack.io</url>
+    </ repository>
+</ repositories>
+```
 
-## Api methods
+* Add the dependency
 
-* `kinopoiskExtApiService.getFilmInfo(filmId)` retrieves all data about the film by id.
-* `kinopoiskExtApiService.getStaffList(filmId)` retrieves data about the staff (actors, producers and so on) by film id.
-* `kinopoiskExtApiService.getGallery(filmId)` retrieves gallery(posters, footage for the film and so no) by film id.
-* `kinopoiskExtApiService.getKPReviews(filmId)` retrieves reviews by film id. It does not contain full review text.
-* `kinopoiskExtApiService.getReviewDetail(reviewId)` retrieves review full data by particular review id.
-* `kinopoiskExtApiService.getKPPeopleDetailView(peopleId)` retrieves detail info of staff person(actor, producer and so on).
-* `kinopoiskExtApiService.getKPTop()` retrieves top of films according the params.
-* `kinopoiskExtApiService.getKPSearchInFilms()`does a search in films by keyword.
-* `kinopoiskExtApiService.getKPSearchInPeople()`does a search in people by keyword.
-* `kinopoiskExtApiService.getNavigator()` does an advanced search of films by filters.
-* `kinopoiskExtApiService.getDigital()` retrieves digital releases for particular month/year.
+build.gradle
 
-## WEB Api 
+```groovy
+ dependencies {
+    implementation 'com.github.TrueDevProfile:kinopoisk-api:0.2.0'
+}
+```
 
-All these methods and more are available via web API https://kinopoiskapiunofficial.tech
+or pom.xml
 
+```xml
 
+<dependency>
+    <groupId>com.github.TrueDevProfile</groupId>
+    <artifactId>kinopoisk-api</artifactId>
+    <version>0.2.0</ version>
+</dependency>
+```
+
+## How to use
+
+You should sign up and get an access token here https://kinopoiskapiunofficial.tech/. Then you can use token to use api:
+
+* Kotlin
+
+```kotlin
+val kinopoiskApiService = KinopoiskApiService("api token")
+val result = kinopoiskApiService.getFilm(301)
+when (result) {
+    is Result.Success -> result.getOrNull() /*actually null is possible only for Failure*/
+    is Result.Failure -> /*handle somehow*/
+}
+```
+
+or
+
+```kotlin
+val kinopoiskApiService = KinopoiskApiService("api token")
+val result = kinopoiskApiService.getFilm(301).getOrNull()
+```
+
+* Java
+
+```java
+KinopoiskApiService kinopoiskApiService=new KinopoiskApiService("api token",15000);
+Film film=kinopoiskApiService.getFilm(301,new ArrayList<>()).getOrNull();
+```
