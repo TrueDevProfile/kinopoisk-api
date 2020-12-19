@@ -73,12 +73,14 @@ or
 
 ```kotlin
 val kinopoiskApiService = KinopoiskApiService("api token")
+// if success it will return value otherwise it will be null 
 val result = kinopoiskApiService.getFilm(301).getOrNull()
 ```
 
 * Java
 
 ```java
-KinopoiskApiService kinopoiskApiService=new KinopoiskApiService("api token",15000);
-Film film=kinopoiskApiService.getFilm(301,new ArrayList<>()).getOrNull();
+KinopoiskApiService kinopoiskApiService = new KinopoiskApiService("api token",15000);
+// if success it will return value otherwise it will be null 
+Film film = kinopoiskApiService.getFilm(301,new ArrayList<>()).getOrNull();
 ```

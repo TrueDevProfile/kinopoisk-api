@@ -1,6 +1,7 @@
 package com.truedev.kinoposk.api.service
 
 import com.truedev.kinoposk.api.model.Result
+import com.truedev.kinoposk.api.model.top.movie.TopType
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Ignore
@@ -54,6 +55,27 @@ class KinopoiskApiServiceTest {
     @Test
     fun `test searchByKeyword will return valid keyword`() {
         val result = kinopoiskApiService.searchByKeyword("avengers")
+        assertTrue(result is Result.Success)
+        assertNotNull((result as Result.Success).result)
+    }
+
+    @Test
+    fun `test getTop will return valid top 250`() {
+        val result = kinopoiskApiService.getTop(TopType.TOP_250_BEST_FILMS)
+        assertTrue(result is Result.Success)
+        assertNotNull((result as Result.Success).result)
+    }
+
+    @Test
+    fun `test getStaff will return valid staff`() {
+        val result = kinopoiskApiService.getStaff(301)
+        assertTrue(result is Result.Success)
+        assertNotNull((result as Result.Success).result)
+    }
+
+    @Test
+    fun `test getPerson will return valid person`() {
+        val result = kinopoiskApiService.getPerson(301)
         assertTrue(result is Result.Success)
         assertNotNull((result as Result.Success).result)
     }
