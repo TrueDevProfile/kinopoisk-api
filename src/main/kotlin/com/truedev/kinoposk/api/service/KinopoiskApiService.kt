@@ -1,297 +1,155 @@
 package com.truedev.kinoposk.api.service
 
-import com.google.common.net.UrlEscapers
-import com.truedev.kinoposk.api.model.film.FilmExt
-import com.truedev.kinoposk.api.model.filmlists.BestFilmsList
-import com.truedev.kinoposk.api.model.gallery.GalleryExt
-import com.truedev.kinoposk.api.model.navigator.NavigatorExt
-import com.truedev.kinoposk.api.model.navigator.filter.NavigatorFiltersExt
-import com.truedev.kinoposk.api.model.navigator.filter.Order
-import com.truedev.kinoposk.api.model.people.PeopleExt
-import com.truedev.kinoposk.api.model.releases.DigitalReleaseExt
-import com.truedev.kinoposk.api.model.review.ReviewListExt
-import com.truedev.kinoposk.api.model.review.details.ReviewExt
-import com.truedev.kinoposk.api.model.search.film.SearchFimResultExt
-import com.truedev.kinoposk.api.model.search.people.SearchPeopleResultExt
-import com.truedev.kinoposk.api.model.sequels.SequelExt
-import com.truedev.kinoposk.api.model.staff.StaffExt
-import com.truedev.kinoposk.api.model.top.TopExt
-import com.truedev.kinoposk.api.model.top.Type
-import com.truedev.kinoposk.api.model.tvshow.TvShowExt
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_BEST_FILMS_LIST
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_DIGITAL
+import com.truedev.kinoposk.api.model.Result
+import com.truedev.kinoposk.api.model.movie.AppendType
+import com.truedev.kinoposk.api.model.movie.Film
+import com.truedev.kinoposk.api.model.movie.frames.GalleryResult
+import com.truedev.kinoposk.api.model.movie.related.RelatedFilmItem
+import com.truedev.kinoposk.api.model.movie.studio.StudioResult
+import com.truedev.kinoposk.api.model.movie.video.VideoResult
+import com.truedev.kinoposk.api.model.search.movie.keyword.SearchResult
+import com.truedev.kinoposk.api.model.staff.Person
+import com.truedev.kinoposk.api.model.staff.StaffItem
+import com.truedev.kinoposk.api.model.top.movie.TopResult
+import com.truedev.kinoposk.api.model.top.movie.TopType
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FILM_STAFF
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_GALLERY
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_NAVIGATOR
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_NAVIGATOR_FILTERS
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_PEOPLE_DETAIL
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEWS
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_REVIEW_DETAIL
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_FILM
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEARCH_PEOPLE
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SIMILAR
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_FRAMES
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_SEQUELS_AND_PREQUELS
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_STAFF
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_STUDIOS
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TOP
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_TV_SHOW
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL
-import com.truedev.kinoposk.api.service.KPApiClientService.Companion.RELEASE_API_URL
-import java.lang.String.valueOf
-import java.net.URLEncoder
-import java.time.LocalDate
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.GET_VIDEOS
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL_V1
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL_V2_1
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_URL_V2_2
+import com.truedev.kinoposk.api.service.KPApiClientService.Companion.SEARCH_BY_KEYWORD
 
-class KinopoiskApiService(timeout: Int = 15000) {
-    private val kpApiClientService: KPApiClientService = KPApiClientService(timeout)
-
-    /**
-     * This method retrieves film info.
-     *
-     * @param filmId id of film from kinopoisk.
-     */
-    fun getFilmInfo(filmId: Int): FilmExt {
-        require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request(MAIN_API_URL, "$GET_FILM?filmID=$filmId", FilmExt::class.java)
-            .let { FilmExt(it.resultCode, it.message, it.response?.data) }
-    }
+class KinopoiskApiService(token: String, timeoutMs: Int = 15000) {
+    private val kpApiClientService: KPApiClientService = KPApiClientService(token, timeoutMs)
 
     /**
-     * This method retrieves staff. E.g. actors, producers and so on.
+     * This method retrieves film data.
      *
-     * @param filmId id of film from kinopoisk.
+     * @param kinopoiskId id of film from kinopoisk.
+     * @param appendTypes to add additional info to response. See [AppendType].
      */
-    fun getStaffList(filmId: Int): StaffExt {
-        require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request(MAIN_API_URL, "$GET_FILM_STAFF?filmID=$filmId", StaffExt::class.java)
-            .let { StaffExt(it.resultCode, it.message, it.response?.data) }
-    }
-
-    /**
-     * This method retrieves gallery.
-     *
-     * @param filmId id of film from kinopoisk.
-     */
-    fun getGallery(filmId: Int): GalleryExt {
-        require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request(MAIN_API_URL, "$GET_GALLERY?filmID=$filmId", GalleryExt::class.java)
-            .let { GalleryExt(it.resultCode, it.message, it.response?.data) }
-    }
-
-    /**
-     * This method retrieves reviews without details.
-     *
-     * @param filmId id of film from kinopoisk.
-     * @param page page of results.
-     */
-    fun getKPReviews(filmId: Int, page: Int = 1): ReviewListExt {
-        require(filmId > 0) { "Film id should be more than 0" }
-        require(page > 0) { "Page should be more than 0" }
+    fun getFilm(kinopoiskId: Int, appendTypes: Iterable<AppendType> = emptyList()): Result<Film> {
+        require(kinopoiskId > 0) { "Film id should be more than 0" }
+        val appends = appendTypes.joinToString()
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_REVIEWS?filmID=$filmId&page=$page",
-            ReviewListExt::class.java
+            MAIN_API_URL_V2_1,
+            "$GET_FILM/$kinopoiskId?append_to_response=$appends",
+            Film::class.java
         )
-            .let { ReviewListExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
-     * This method retrieves people details.
+     * Returns frames for particular kinopoiskId.
      *
-     * @param peopleId id of people from kinopoisk.
+     * @param kinopoiskId id of film from kinopoisk.
      */
-    fun getKPPeopleDetailView(peopleId: Int): PeopleExt {
-        require(peopleId > 0) { "People id should be more than 0" }
-        return kpApiClientService.request(MAIN_API_URL, "$GET_PEOPLE_DETAIL?peopleID=$peopleId", PeopleExt::class.java)
-            .let { PeopleExt(it.resultCode, it.message, it.response?.data) }
-    }
-
-    /**
-     * This method retrieves top of films according to type.
-     *
-     * @param type type of top. E.g. POPULAR_FILMS, BEST_FILMS, AWAIT_FILMS.
-     * @param page page of results.
-     * @param listId id of sub list from [getBestFilmsList]
-     */
-    fun getKPTop(type: Type, page: Int = 1, listId: Int = 0): TopExt {
-        require(page > 0) { "Page should be more than 0" }
+    fun getFrames(kinopoiskId: Int): Result<GalleryResult> {
+        require(kinopoiskId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_TOP?page=$page&listID=$listId&type=${type.type}",
-            TopExt::class.java
+            MAIN_API_URL_V2_1,
+            "$GET_FILM/$kinopoiskId$GET_FRAMES",
+            GalleryResult::class.java
         )
-            .let { TopExt(it.resultCode, it.message, it.response?.data) }
     }
 
     /**
-     * This method searches films by keyword.
+     * Returns videos for particular kinopoiskId.
      *
-     * @param keyword for searching.
-     * @param page page of results.
+     * @param kinopoiskId id of film from kinopoisk.
      */
-    fun getKPSearchInFilms(keyword: String, page: Int = 1): SearchFimResultExt {
-        require(page > 0) { "Page should be more than 0" }
+    fun getVideos(kinopoiskId: Int): Result<VideoResult> {
+        require(kinopoiskId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_SEARCH_FILM?keyword=${
-                UrlEscapers.urlFragmentEscaper()
-                    .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))
-            }&page=$page",
-            SearchFimResultExt::class.java
-        ).let { SearchFimResultExt(it.resultCode, it.message, it.response?.data) }
+            MAIN_API_URL_V2_1,
+            "$GET_FILM/$kinopoiskId$GET_VIDEOS",
+            VideoResult::class.java
+        )
     }
 
     /**
-     * This method searches people by keyword.
+     * Returns studios for particular kinopoiskId.
      *
-     * @param keyword for searching.
-     * @param page page of results.
+     * @param kinopoiskId id of film from kinopoisk.
      */
-    fun getKPSearchInPeople(keyword: String, page: Int = 1): SearchPeopleResultExt {
-        require(page > 0) { "Page should be more than 0" }
+    fun getStudios(kinopoiskId: Int): Result<StudioResult> {
+        require(kinopoiskId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_SEARCH_PEOPLE?keyword=${
-                UrlEscapers.urlFragmentEscaper()
-                    .escape(keyword.replace("[^a-zA-Zа-яА-Я0-9_]".toRegex(), " "))
-            }&page=$page",
-            SearchPeopleResultExt::class.java
-        ).let { SearchPeopleResultExt(it.resultCode, it.message, it.response?.data) }
+            MAIN_API_URL_V2_1,
+            "$GET_FILM/$kinopoiskId$GET_STUDIOS",
+            StudioResult::class.java
+        )
     }
 
     /**
-     * This method retrieves review details.
+     * Returns sequels and prequels for particular kinopoiskId.
      *
-     * @param reviewId id of review from kinopoisk.
+     * @param kinopoiskId id of film from kinopoisk.
      */
-    fun getReviewDetail(reviewId: Int): ReviewExt {
-        require(reviewId > 0) { "Review id should be more than 0" }
+    fun getSequelsAndPrequels(kinopoiskId: Int): Result<List<RelatedFilmItem>> {
+        require(kinopoiskId > 0) { "Film id should be more than 0" }
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_REVIEW_DETAIL?reviewID=$reviewId", ReviewExt::class.java
-        ).let { ReviewExt(it.resultCode, it.message, it.response?.data) }
+            MAIN_API_URL_V2_1,
+            "$GET_FILM/$kinopoiskId$GET_SEQUELS_AND_PREQUELS",
+            List::class.java as Class<List<RelatedFilmItem>>
+        )
     }
 
     /**
-     * This method retrieves different names of lists best films.
-     * Default returns all best films lists. If set id of list, then returns sub lists.
-     * Use @see [getKPTop] to get films from sub lists
+     * Returns search result by keyword.
      *
-     * @param listId id of named list from kinopoisk.
+     * @param keyword keyword to search.
+     * @param page page.
      */
-    fun getBestFilmsList(listId: Int = 0): BestFilmsList {
+    fun searchByKeyword(keyword: String, page: Int = 1): Result<SearchResult> {
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_BEST_FILMS_LIST?listID=$listId&region_id=20615", BestFilmsList::class.java
-        ).let { BestFilmsList(it.resultCode, it.message, it.response?.data) }
+            MAIN_API_URL_V2_1,
+            "$GET_FILM$SEARCH_BY_KEYWORD?keyword=$keyword&page=$page",
+            SearchResult::class.java
+        )
     }
 
     /**
-     * This method retrieves inner kinopoisk ids for countries/genres.
+     * Returns top by particular top type [TopType].
      *
+     * @param topType see [TopType].
+     * @param page page.
      */
-    fun getNavigatorFilters(): NavigatorFiltersExt {
+    fun getTop(topType: TopType, page: Int = 1): Result<TopResult> {
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_NAVIGATOR_FILTERS?region_id=20615", NavigatorFiltersExt::class.java
-        ).let {
-            NavigatorFiltersExt(
-                it.resultCode,
-                it.message,
-                it.response?.data
-            )
-        }
+            MAIN_API_URL_V2_2,
+            "$GET_FILM$GET_TOP?type=$topType&page=$page",
+            TopResult::class.java
+        )
     }
 
     /**
-     * Advanced search of films by filters.
+     * Returns all persons by particular film id.
      *
+     * @param kinopoiskFilmId film id.
      */
-    fun getNavigator(
-        countryIds: List<Int> = emptyList(),
-        genreIds: List<Int> = emptyList(),
-        order: Order = Order.RATING,
-        ratingFrom: Int = 0,
-        ratingTo: Int = 10,
-        yearFrom: Int = 1900,
-        yearTo: Int = 2050,
-        page: Int = 1
-    ): NavigatorExt {
-        require(page > 0) { "Page should be more than 0" }
+    fun getStaff(kinopoiskFilmId: Int): Result<List<StaffItem>> {
         return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_NAVIGATOR?country=${URLEncoder.encode(countryIds.joinToString(separator = ","), "UTF-8")}&" +
-                    "genre=${URLEncoder.encode(genreIds.joinToString(separator = ","), "UTF-8")}&" +
-                    "order=${URLEncoder.encode(order.queryNameParam, "UTF-8")}&" +
-                    "page=$page&" +
-                    "rating=${URLEncoder.encode("$ratingFrom:$ratingTo", "UTF-8")}&" +
-                    "years=${URLEncoder.encode("$yearFrom:$yearTo", "UTF-8")}&" +
-                    "region_id=20615&" +
-                    "type=all",
-            NavigatorExt::class.java
-        ).let { NavigatorExt(it.resultCode, it.message, it.response?.data) }
+            MAIN_API_URL_V1,
+            "$GET_STAFF?filmId=$kinopoiskFilmId",
+            List::class.java as Class<List<StaffItem>>
+        )
     }
 
     /**
-     * This method retrieves digital releases https://www.kinopoisk.ru/comingsoon/digital/.
+     * Returns person by particular film..
      *
+     * @param kinopoiskId person id.
      */
-    fun getDigital(
-        digitalReleaseMonth: LocalDate = LocalDate.now(),
-        limit: Int = 10,
-        offset: Int = 0
-    ): DigitalReleaseExt {
-        val month = when {
-            digitalReleaseMonth.monthValue < 10 ->
-                "0" + valueOf(digitalReleaseMonth.monthValue)
-            else -> valueOf(digitalReleaseMonth.monthValue)
-        }
+    fun getPerson(kinopoiskId: Int): Result<Person> {
         return kpApiClientService.request(
-            RELEASE_API_URL,
-            "$GET_DIGITAL?digitalReleaseMonth=$month.${digitalReleaseMonth.year}&" +
-                    "limit=$limit&" +
-                    "offset=$offset&" +
-                    "region_id=20615",
-            DigitalReleaseExt::class.java
-        ).let {
-            DigitalReleaseExt(
-                it.resultCode,
-                it.message,
-                it.response?.data
-            )
-        }
-    }
-
-    /**
-     * This method retrieves tv show data (series, seasons and so on).
-     *
-     */
-    fun getTvShowInfo(tvShowId: Int): TvShowExt {
-        require(tvShowId > 0) { "Tv show id should be more than 0" }
-        return kpApiClientService.request(
-            RELEASE_API_URL, "$GET_TV_SHOW$tvShowId",
-            TvShowExt::class.java
-        ).let {
-            TvShowExt(
-                it.response!!.success,
-                it.response.data
-            )
-        }
-    }
-
-    /**
-     * This method retrieves sequels and prequels.
-     *
-     */
-    fun getSequelsAndPrequels(filmId: Int, page: Int): SequelExt {
-        require(filmId > 0) { "Film id should be more than 0" }
-        return kpApiClientService.request(
-            MAIN_API_URL,
-            "$GET_SIMILAR?filmID=$filmId&page=$page&region_id=20615&type=kp_sequels_and_prequels_films",
-            SequelExt::class.java
-        ).let {
-            SequelExt(
-                it.resultCode,
-                it.message,
-                it.response?.data
-            )
-        }
+            MAIN_API_URL_V1,
+            "$GET_STAFF/$kinopoiskId",
+            Person::class.java
+        )
     }
 }

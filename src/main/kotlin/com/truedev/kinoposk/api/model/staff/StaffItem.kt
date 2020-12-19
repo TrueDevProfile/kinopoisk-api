@@ -1,17 +1,14 @@
 package com.truedev.kinoposk.api.model.staff
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.truedev.kinoposk.api.model.deserializer.StringToProfessionDeserializer
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class StaffItem(
-    val id: Int = 0,
-    val nameRU: String = "",
-    val nameEN: String = "",
-    val posterUrl: String? = "https://st.kp.yandex.net/images/actor/$id.jpg",
-    val description: String? = null,
-    val professionText: String = "",
-    @JsonDeserialize(using = StringToProfessionDeserializer::class)
+    @JsonProperty("staffId")
+    val kinopoiskId: Int, // kinopoisk person id
+    val nameRu: String?,
+    val nameEn: String?,
+    val description: String?,
+    val posterUrl: String?,
+    val professionText: String,
     val professionKey: Profession = Profession.UNKNOWN
 )
