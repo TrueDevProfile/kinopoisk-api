@@ -1,6 +1,6 @@
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m783752614-ab5a9ed8f9b0e0ca7fa3564f?label=web%20api%20status)
 [![](https://www.jitpack.io/v/TrueDevProfile/kinopoisk-api.svg)](https://www.jitpack.io/#TrueDevProfile/kinopoisk-api)
-[![Build Status](https://travis-ci.com/TrueDevProfile/kinopoisk-api.svg?branch=master)](https://travis-ci.org/TrueDevProfile/kinopoisk-api)
+[![Build Status](https://travis-ci.com/TrueDevProfile/kinopoisk-api.svg?branch=master)](https://travis-ci.com/TrueDevProfile/kinopoisk-api)
 <a href="https://ktlint.github.io/"><img src="https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg" alt="ktlint"></a>
 
 # Kinopoisk Api
