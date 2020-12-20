@@ -2,12 +2,12 @@ package com.truedev.kinoposk.api.service
 
 import com.truedev.kinoposk.api.model.Result
 import com.truedev.kinoposk.api.model.top.movie.TopType
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 
-@Ignore
+@Disabled
 class KinopoiskApiServiceTest {
 
     private val kinopoiskApiService: KinopoiskApiService = KinopoiskApiService("")
