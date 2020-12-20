@@ -25,7 +25,12 @@ import com.truedev.kinoposk.api.service.KPApiClientService.Companion.MAIN_API_UR
 import com.truedev.kinoposk.api.service.KPApiClientService.Companion.SEARCH_BY_KEYWORD
 
 class KinopoiskApiService(token: String, timeoutMs: Int = 15000) {
-    private val kpApiClientService: KPApiClientService = KPApiClientService(token, timeoutMs)
+    private val kpApiClientService: KPApiClientService
+
+    init {
+        require(token.isNotBlank()) { "The API token should not be empty or null" }
+        kpApiClientService = KPApiClientService(token, timeoutMs)
+    }
 
     /**
      * This method retrieves film data.
